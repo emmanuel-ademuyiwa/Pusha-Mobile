@@ -1,0 +1,99 @@
+{
+  "expo": {
+    "name": "Pusha",
+    "slug": "pusha",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "scheme": "pusha",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pusha.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/foreground.png",
+        "backgroundColor": "#142952"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.pusha.app",
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#142952",
+          "imageWidth": 200
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/InstrumentSan-Medium.ttf",
+            "./assets/fonts/InstrumentSan-Regular.ttf",
+            "./assets/fonts/InstrumentSan-SemiBold.ttf",
+            "./assets/fonts/InstrumentSan-Bold.ttf",
+            "./assets/fonts/dahlia-regular.otf",
+            "./assets/fonts/dahlia-medium.otf",
+            "./assets/fonts/dahlia-bold.otf",
+            "./assets/fonts/icomoon.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow Pusha to use Face ID to authtenticate sensitive actions."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Pusha needs permission to access your product photos which are used in your product listings."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow Pusha to access your photos.",
+          "savePhotosPermission": "Allow Pusha to save photos."
+        }
+      ],
+      "expo-build-properties",
+      "expo-web-browser"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "ENV": {
+        "BASE_URL": "https://pusha-beta-6ubbw.ondigitalocean.app",
+        "DEV_BASE_URL": "https://pusha-beta-6ubbw.ondigitalocean.app",
+        "CLOUDINARY_NAME": "delzblzt7"
+      },
+      "router": {},
+      "eas": {
+        "projectId": "b12e24da-db0f-42c4-b443-ce833c629d30"
+      }
+    },
+    "owner": "emmanuel-ademuyiwa"
+  }
+}

@@ -1,0 +1,63 @@
+import {Stack} from 'expo-router'
+import {StatusBar} from 'expo-status-bar'
+import React from 'react'
+
+import OTAUpdatesScreen from '@/components/screens/ota-updates'
+import {Box} from '@/components/ui'
+import {useIsUpdateScreenShown} from '@/store/updatesStore'
+
+const AuthLayout = () => {
+  const isUpdatesScreenShown = useIsUpdateScreenShown()
+
+  return (
+    <Box flex={1} position="relative">
+      <StatusBar style="dark" animated />
+
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: 'none'
+        }}>
+        <Stack.Screen
+          name="products/edit/[productId]"
+          options={{
+            gestureEnabled: false
+          }}
+        />
+        <Stack.Screen
+          name="create-product"
+          options={{
+            gestureEnabled: false
+          }}
+        />
+        <Stack.Screen
+          name="product-variants"
+          options={{
+            gestureEnabled: false
+          }}
+        />
+        <Stack.Screen
+          name="unlisted-products"
+          options={{
+            animation: 'slide_from_right'
+          }}
+        />
+        <Stack.Screen
+          name="webview-modal"
+          options={{
+            presentation: 'modal',
+            gestureEnabled: true,
+            animation: 'slide_from_bottom'
+          }}
+        />
+      </Stack>
+      {isUpdatesScreenShown && (
+        <Box position="absolute" height="100%" width="100%">
+          <OTAUpdatesScreen />
+        </Box>
+      )}
+    </Box>
+  )
+}
+
+export default AuthLayout
