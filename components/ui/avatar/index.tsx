@@ -26,8 +26,8 @@ export const Avatar: React.FC<AvatarProps> = ({src, name, size = 50}) => {
   const avatarStyle: ViewStyle = {
     width: size,
     height: size,
-    borderRadius: size / 2,
-    backgroundColor: '#000000',
+    borderRadius: 8,
+    backgroundColor: '#142952',
     justifyContent: 'center',
     alignItems: 'center'
   }
@@ -45,7 +45,7 @@ export const Avatar: React.FC<AvatarProps> = ({src, name, size = 50}) => {
           style={{
             width: size,
             height: size,
-            borderRadius: size / 2
+            borderRadius: 8
           }}
         />
       ) : (

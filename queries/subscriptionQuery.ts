@@ -3,12 +3,20 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/api'
 import { QUERY_KEYS } from '@/constants/queryKeys'
 
+function normalizePlansResponse(data: unknown): unknown[] {
+  if (!data) return []
+  const d = data as {records?: unknown[]}
+  if (d.records && Array.isArray(d.records)) return d.records
+  return Array.isArray(data) ? data : []
+}
+
 export const useGetSubscriptionPlans = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.SUBSCRIPTION_PLANS],
     queryFn: async () => {
       const response = await api.subscription.getPlans()
-      return response?.data?.data
+      const raw = response?.data?.data ?? response?.data
+      return normalizePlansResponse(raw)
     },
     staleTime: 1000 * 60 * 15, // 15 minutes
     gcTime: 1000 * 60 * 30 // 30 minutes
@@ -33,6 +41,46 @@ export const useSubscribe = () => {
   return useMutation({
     mutationFn: async (payload: {plan_id?: string}) => {
       const response = await api.subscription.subscribe(payload)
+      return response?.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CURRENT_SUBSCRIPTION]
+      })
+    }
+  })
+}
+
+/** Matches web `useSubscribeFreeTier` — select-package / first subscription. */
+export const useSubscribeFreeTier = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: {
+      plan_id: string
+      billing_cycle: 'MONTHLY' | 'YEARLY'
+    }) => {
+      const response = await api.subscription.subscribeFreeTier(payload)
+      return response?.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CURRENT_SUBSCRIPTION]
+      })
+    }
+  })
+}
+
+/** Matches web `useChangePlan` — settings / subscribed users switching plan. */
+export const useChangePlan = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (payload: {
+      plan_id: string
+      billing_cycle: 'MONTHLY' | 'YEARLY'
+    }) => {
+      const response = await api.subscription.changePlan(payload)
       return response?.data
     },
     onSuccess: () => {

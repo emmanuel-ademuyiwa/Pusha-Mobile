@@ -4,6 +4,7 @@ import {Switch} from 'react-native'
 interface SwitchProps {
   value: boolean
   onValueChange: () => void
+  disabled?: boolean
 }
 
 export const BZSwitch = (props: SwitchProps) => {
@@ -16,6 +17,7 @@ export const BZSwitch = (props: SwitchProps) => {
       thumbColor="#ffffff"
       onValueChange={handleOnValueChange}
       value={props.value}
+      disabled={props.disabled}
     />
   )
 }

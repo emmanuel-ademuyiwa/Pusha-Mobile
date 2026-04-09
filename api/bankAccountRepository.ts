@@ -55,5 +55,13 @@ export default {
       method: HttpMethods.Get,
       query: query
     })
+  },
+
+  submitKyc: (payload: {bvn: string}) => {
+    return UseEndpoint({
+      endpoint: '/kyc',
+      method: HttpMethods.Post,
+      payload
+    })
   }
 }

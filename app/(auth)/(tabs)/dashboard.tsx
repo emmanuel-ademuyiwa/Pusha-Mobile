@@ -8,6 +8,7 @@ import {
   Container,
   PageError,
   PeriodFilter,
+  PeriodTabsRow,
   PushaActivityIndicator,
   Typography
 } from '@/components/ui'
@@ -35,7 +36,7 @@ import {getFromVault} from '@/utils/storage'
 import {router} from 'expo-router'
 import {StatusBar} from 'expo-status-bar'
 import React, {useMemo, useState} from 'react'
-import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native'
+import {StyleSheet, TouchableOpacity} from 'react-native'
 import {Image} from 'expo-image'
 import {ScreenView} from '@/components/util/screen-view'
 import { KeyboardAwareScrollView } from '@/components/util/keyboard-aware-scroll-view';
@@ -406,7 +407,7 @@ const Dashboard = () => {
       headerAction={
         <Box
           pt={16}
-          pb={4}
+          pb={8}
           flex={1}
           flexDirection="row"
           alignItems="center"
@@ -419,13 +420,13 @@ const Dashboard = () => {
                   ? `${user.first_name} ${user.last_name ?? ''}`
                   : 'User'
               }
-              size={44}
+              size={40}
             />
             <Box>
-              <Typography variant="c1-medium" color="secondary-500">
+              <Typography variant="h3-bold" color="secondary-500">
                 Hello, {user?.first_name ?? 'there'}
               </Typography>
-              <Typography variant="c2" color="neutral-600">
+              <Typography variant="c1" color="neutral-600">
                 Here&apos;s what your business has been up to
               </Typography>
             </Box>
@@ -461,37 +462,16 @@ const Dashboard = () => {
           {/* ── Header ── */}
 
           {/* ── Title ── */}
-          <Typography variant="h2-bold" color="secondary-500" mt={12} mb={16}>
+          <Typography variant="h2-bold" color="secondary-500" mt={0}>
             Dashboard
           </Typography>
 
           {/* ── Period tabs ── */}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.tabsScroll}>
-            <Box flexDirection="row" alignItems="center" gap={8} pb={4}>
-              {PERIOD_TABS.map(({key, label}) => (
-                <TouchableOpacity
-                  key={key}
-                  activeOpacity={0.8}
-                  onPress={() => setMainPeriod(key)}>
-                  <Box
-                    paddingHorizontal={16}
-                    paddingVertical={8}
-                    borderRadius={20}
-                    style={[
-                      styles.periodTab,
-                      mainPeriod === key && styles.periodTabActive
-                    ]}>
-                    <Typography
-                      variant="c1-medium"
-                      color={mainPeriod === key ? 'white' : 'neutral-600'}>
-                      {label}
-                    </Typography>
-                  </Box>
-                </TouchableOpacity>
-              ))}
+          <PeriodTabsRow
+            tabs={PERIOD_TABS}
+            selectedKey={mainPeriod}
+            onSelect={k => setMainPeriod(k as MainPeriod)}
+            trailing={
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => setMainPeriod('all')}>
@@ -501,14 +481,14 @@ const Dashboard = () => {
                   </Typography>
                 </Box>
               </TouchableOpacity>
-            </Box>
-          </ScrollView>
+            }
+          />
         </Container>
 
         <Container>
-          <Box gap={16} pb={100} mt={8}>
+          <Box gap={16} pb={100}>
             {/* ── Business Overview ── */}
-            {statsLoading ? (
+            {/* {statsLoading ? (
               <Box height={72} alignItems="center" justifyContent="center">
                 <PushaActivityIndicator />
               </Box>
@@ -530,7 +510,7 @@ const Dashboard = () => {
                   icon={<AppIcon name="Package" size={18} color="#00A63E" />}
                 />
               </Box>
-            )}
+            )} */}
 
             {/* ── Stats cards (period-filtered) ── */}
             {statsLoading ? (
@@ -576,6 +556,9 @@ const Dashboard = () => {
                       title="Wallet Balance"
                       value={formatCurrency(wallet?.balance ?? 0, 'short') ?? '₦0'}
                       icon={<AppIcon name="Wallet" size={18} color="#FFA500" />}
+                      onPress={() =>
+                        router.push('/(auth)/(more)/wallet' as any)
+                      }
                     />
                     <StatsCard
                       title="Total Earned"
@@ -1010,13 +993,6 @@ const Dashboard = () => {
 }
 
 const styles = StyleSheet.create({
-  tabsScroll: {marginBottom: 4},
-  periodTab: {
-    backgroundColor: '#F5F5F5'
-  },
-  periodTabActive: {
-    backgroundColor: '#142952'
-  },
   bellWrapper: {
     width: 40,
     height: 40,

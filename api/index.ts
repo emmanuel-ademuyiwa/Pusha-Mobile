@@ -16,6 +16,7 @@ import SocialsRepository from './socialsRepository'
 import SubscriptionRepository from './subscriptionRepository'
 import UserRepository from './userRepository'
 import WalletRepository from './walletRepository'
+import WebchatRepository from './webchatRepository'
 
 export const api = {
   merchants: MerchantsRepository,
@@ -35,7 +36,8 @@ export const api = {
   bankAccount: BankAccountRepository,
   referrals: ReferralsRepository,
   notifications: NotificationsRepository,
-  chats: ChatsRepository
+  chats: ChatsRepository,
+  webchat: WebchatRepository
 }
 
 export default api

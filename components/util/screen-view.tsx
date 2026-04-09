@@ -61,9 +61,11 @@ export const ScreenView: React.FC<
                   variant={'h3-bold'}>
                   {props.navTitle}
                 </Typography>
-              ) : (
-                props.navTitle
-              )}
+              ) : props.navTitle ? (
+                <Box flex={1} minWidth={0}>
+                  {props.navTitle}
+                </Box>
+              ) : null}
               {props.alignNav === 'center' &&
                 props.navTitle &&
                 !props.headerAction && <Box width={40} height={40} />}

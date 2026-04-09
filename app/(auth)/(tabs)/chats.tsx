@@ -2,30 +2,16 @@ import {AppIcon, Box, Container, EmptyState, PageError, PushaActivityIndicator, 
 import {AppView} from '@/components/ui/app-view'
 import { ScreenView } from '@/components/util/screen-view';
 import {type IChatSession, useGetChats} from '@/queries/chatsQuery'
+import {
+  getCustomerInitial,
+  getCustomerName,
+  getCustomerSubtitle,
+} from '@/utils/chatSessionDisplay'
 import {formatDate} from '@/utils/datetime'
 import {router} from 'expo-router'
 import {StatusBar} from 'expo-status-bar'
 import React from 'react'
 import {FlatList, TouchableOpacity} from 'react-native'
-
-function getCustomerName(chat: IChatSession): string {
-  const c = chat.customer
-  if (!c) return 'Unknown Visitor'
-  const full = [c.first_name, c.last_name].filter(Boolean).join(' ')
-  return full || 'Unknown Visitor'
-}
-
-function getCustomerInitial(chat: IChatSession): string {
-  const c = chat.customer
-  if (!c || !c.first_name) return '?'
-  return c.first_name[0].toUpperCase()
-}
-
-function getCustomerSubtitle(chat: IChatSession): string {
-  const c = chat.customer
-  if (!c) return chat.channel
-  return c.email ?? c.phone_number ?? chat.channel
-}
 
 const ChatItem = ({item, onPress}: {item: IChatSession; onPress: () => void}) => {
   const name = getCustomerName(item)
@@ -99,7 +85,7 @@ const Chats = () => {
   }
 
   return (
-    <ScreenView backButton={false} navTitle="Chats" alignNav="center" hasTopBanner={false} footerPadding={false}>
+    <ScreenView backButton={false} navTitle="Chats" hasTopBanner={false} footerPadding={false}>
       <StatusBar style="dark" animated />
       {/* <Container>
         <Box pt={16} pb={8} flexDirection="row" alignItems="center" justifyContent="space-between">

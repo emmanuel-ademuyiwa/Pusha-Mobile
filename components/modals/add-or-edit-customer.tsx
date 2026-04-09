@@ -1,6 +1,7 @@
 import {useQueryClient} from '@tanstack/react-query'
 import React, {forwardRef, useEffect, useState} from 'react'
 
+import {api} from '@/api'
 import {AppModal, Box, Button, TextField} from '@/components/ui'
 import {API_STATUS} from '@/constants/ApiConstants'
 import {QUERY_KEYS} from '@/constants/queryKeys'
@@ -41,22 +42,24 @@ const AddOrEditCustomer = forwardRef<Modal, AddOrEditCustomerProps>(
       try {
         setSubmitApiState(API_STATUS.LOADING)
 
-        const payload = {
-          name: values.name,
-          phone: values.phone,
-          email: values.email
-        }
-
         if (isEditMode) {
-          // TODO: Implement edit API call with image upload
-          // await api.products.updateProduct(props.customerId, payload)
-          // toast.info('Product updated successfully')
+          // TODO: Implement edit API with ICustomerPayload
         } else {
-          // TODO: Implement create API call with image upload
-          // await api.products.createProduct(payload)
-          // toast.info('Product created successfully')
+          const parts = values.name.trim().split(/\s+/)
+          const first_name = parts[0] ?? ''
+          const last_name = parts.slice(1).join(' ') || ''
+          await api.customers.createCustomer({
+            first_name,
+            last_name,
+            gender: 'male',
+            phone_number: values.phone.trim(),
+            email: (values.email || '').trim(),
+            avatar: ''
+          })
+          toast.success('Customer created successfully!')
         }
         props.onSuccess?.()
+        queryClient.invalidateQueries({queryKey: [QUERY_KEYS.CUSTOMERS]}).then()
         queryClient.invalidateQueries({queryKey: [QUERY_KEYS.CUSTOMER]}).then()
 
         if (isEditMode) {

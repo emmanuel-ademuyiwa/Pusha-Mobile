@@ -6,7 +6,7 @@ import React from 'react'
 
 const Page = () => {
   const {data, isLoading, isError, refetch} = useGetWalletTransactions()
-  const items = (data as any)?.data ?? data ?? []
+  const items = Array.isArray(data) ? data : []
 
   if (isError) return <PageError reload={refetch} />
 

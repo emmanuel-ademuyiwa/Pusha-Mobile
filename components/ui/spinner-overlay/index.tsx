@@ -13,12 +13,10 @@ export const SpinnerOverlay: React.FC<SpinnerOverlayProps> = ({
   ...props
 }) => {
   return (
-    <View
-      style={[styles.container, props.style]}
-      pointerEvents={show ? 'none' : 'auto'}>
+    <View style={[styles.container, props.style]}>
       {children}
       {show && (
-        <View style={styles.overlay}>
+        <View style={styles.overlay} pointerEvents="auto">
           <BZActivityIndicator size="large" color="#FFFFFF" />
         </View>
       )}
@@ -36,7 +34,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1 // Ensure the overlay is above the content
+    zIndex: 100
   }
 })
 

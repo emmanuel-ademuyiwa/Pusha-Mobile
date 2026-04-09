@@ -113,11 +113,11 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
           marginEnd,
           marginStart
         }}>
-        {/* {label && (
+        {label ? (
           <Typography variant="c1-medium" color="neutral-600" mb={8}>
             {label}
           </Typography>
-        )} */}
+        ) : null}
         <Pressable accessibilityRole="button" onPress={onPress}>
           <Box
             style={[
@@ -146,7 +146,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
             )}
 
             <TextInput
-              aria-label={props.label}
+              accessibilityLabel={label ?? placeholder ?? name}
               allowFontScaling={false}
               onPressIn={onPress}
               ref={ref}

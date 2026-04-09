@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '@/api'
+import type { ISaleOrder } from '@/queries/salesQuery'
 import { ICustomerPayload } from '@/api/customersRepository'
 import { QUERY_KEYS } from '@/constants/queryKeys'
 import { useInfinitePagination } from '@/hooks/useInfinitePagination'
@@ -149,6 +150,59 @@ export const useSearchCustomers = (searchTerm: string, enabled = true) => {
 }
 
 // Hook for customer statistics/analytics
+export type CustomerPurchaseAggregate = {
+  totalPurchases: number
+  outstanding: number
+  lastPurchaseIso: string | null
+}
+
+/**
+ * Rolls up recent sales per customer for list UI (totals, debt estimate, last purchase).
+ */
+export const useCustomerPurchaseAggregates = (enabled = true) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.CUSTOMERS, 'purchase-aggregates'],
+    queryFn: async () => {
+      const response = await api.sales.listSales({page: 1, limit: 1000})
+      const records = (response?.data?.data?.records ?? []) as ISaleOrder[]
+      const map = new Map<string, CustomerPurchaseAggregate>()
+
+      for (const sale of records) {
+        const cid = sale.customer_id
+        if (!cid) continue
+
+        const prev = map.get(cid) ?? {
+          totalPurchases: 0,
+          outstanding: 0,
+          lastPurchaseIso: null as string | null
+        }
+
+        const total = Number(sale.total_amount) || 0
+        const paid = Number(sale.amount_paid) || 0
+        prev.totalPurchases += total
+        prev.outstanding += Math.max(0, total - paid)
+
+        const d = sale.sale_date || sale.created_at
+        if (d) {
+          if (
+            !prev.lastPurchaseIso ||
+            new Date(d).getTime() > new Date(prev.lastPurchaseIso).getTime()
+          ) {
+            prev.lastPurchaseIso = d
+          }
+        }
+
+        map.set(cid, prev)
+      }
+
+      return map
+    },
+    enabled,
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 5
+  })
+}
+
 export const useCustomerStats = (customerId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.CUSTOMER, customerId, 'stats'],

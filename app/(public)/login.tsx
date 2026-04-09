@@ -6,17 +6,17 @@ import {
   TextAction,
   Typography
 } from '@/components/ui'
-import { ImageBackground } from 'expo-image'
-import { StatusBar } from 'expo-status-bar'
-import React, { useEffect, useState } from 'react'
+import {ImageBackground} from 'expo-image'
+import {StatusBar} from 'expo-status-bar'
+import React, {useEffect, useState} from 'react'
 
 import NumericKeypad from '@/components/ui/numeric-keypad'
-import { KeyboardAwareScrollView } from '@/components/util/keyboard-aware-scroll-view'
-import { useAuthActions, useAuthLoadingState } from '@/store/authStore'
-import { getFromVault } from '@/utils/storage'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Platform } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import {KeyboardAwareScrollView} from '@/components/util/keyboard-aware-scroll-view'
+import {useAuthActions, useAuthLoadingState} from '@/store/authStore'
+import {getFromVault} from '@/utils/storage'
+import {LinearGradient} from 'expo-linear-gradient'
+import {Platform} from 'react-native'
+import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 const images = {
   blue: require('@/assets/icon.png'),
@@ -48,7 +48,7 @@ const Page = () => {
 
   return (
     <SpinnerOverlay show={authLoadingState.loginUser}>
-      <Box flex={1} pb={Math.round(insets.bottom+8)}>
+      <Box flex={1} pb={Math.round(insets.bottom + 8)}>
         <StatusBar style={Platform.OS === 'ios' ? 'light' : 'dark'} animated />
         <LinearGradient
           colors={['#2554C7', '#142952']}
@@ -120,15 +120,15 @@ const Page = () => {
 
               <Typography variant="h3">Enter your Passcode</Typography>
             </Box>
+            <NumericKeypad
+              onKeyPress={val => {
+                if (passcode.length < 4 && /\d/.test(val))
+                  setPasscode(passcode + val)
+              }}
+              onDelete={() => setPasscode(passcode.slice(0, -1))}
+            />
+            <Box pb={50} />
           </KeyboardAwareScrollView>
-
-          <NumericKeypad
-            onKeyPress={val => {
-              if (passcode.length < 4 && /\d/.test(val))
-                setPasscode(passcode + val)
-            }}
-            onDelete={() => setPasscode(passcode.slice(0, -1))}
-          />
 
           <TextAction
             textAlign="center"

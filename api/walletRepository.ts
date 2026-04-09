@@ -3,8 +3,7 @@ import {UseEndpoint} from '@/utils/api'
 
 interface WithdrawalPayload {
   amount: number
-  bank_account_id: string
-  description?: string
+  otp: string
 }
 
 interface SendOtpPayload {

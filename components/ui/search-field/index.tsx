@@ -1,5 +1,7 @@
 import {useState} from 'react'
-import {AppIcon, TextField, TextFieldProps} from '@/components/ui'
+
+import {AppIcon} from '../app-icon'
+import {TextField, type TextFieldProps} from '../text-field'
 
 type SearchFieldProps = Omit<TextFieldProps, 'name' | 'value' | 'onChangeText'> & {
   name?: string

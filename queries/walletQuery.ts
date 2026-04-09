@@ -15,12 +15,16 @@ export const useGetWalletBalance = () => {
   })
 }
 
-export const useGetWalletTransactions = (page?: number, limit?: number) => {
+export const useGetWalletTransactions = (page = 1, limit = 50) => {
   return useQuery({
     queryKey: [QUERY_KEYS.WALLET_TRANSACTIONS, page, limit],
     queryFn: async () => {
       const response = await api.wallet.getTransactions(page, limit)
-      return response?.data?.data
+      const raw = response?.data?.data ?? response?.data
+      if (Array.isArray(raw)) return raw
+      const records = (raw as {records?: unknown[]})?.records
+      if (Array.isArray(records)) return records
+      return []
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 10 // 10 minutes
@@ -43,11 +47,7 @@ export const useMakeWithdrawal = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (payload: {
-      amount: number
-      bank_account_id: string
-      description?: string
-    }) => {
+    mutationFn: async (payload: {amount: number; otp: string}) => {
       const response = await api.wallet.makeWithdrawal(payload)
       return response?.data
     },

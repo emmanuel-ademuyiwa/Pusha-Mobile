@@ -5,6 +5,16 @@ interface SubscribePayload {
   plan_id?: string
 }
 
+interface SubscribeFreeTierPayload {
+  plan_id: string
+  billing_cycle: 'MONTHLY' | 'YEARLY'
+}
+
+interface ChangePlanPayload {
+  plan_id: string
+  billing_cycle: 'MONTHLY' | 'YEARLY'
+}
+
 interface InitiatePaymentPayload {
   plan_id: string
   billing_cycle: 'MONTHLY' | 'YEARLY'
@@ -28,6 +38,22 @@ export default {
       endpoint: '/subscription/subscribe',
       method: HttpMethods.Post,
       payload: payload
+    })
+  },
+
+  subscribeFreeTier: (payload: SubscribeFreeTierPayload) => {
+    return UseEndpoint({
+      endpoint: '/subscription/subscribe/free-tier',
+      method: HttpMethods.Post,
+      payload
+    })
+  },
+
+  changePlan: (payload: ChangePlanPayload) => {
+    return UseEndpoint({
+      endpoint: '/subscription/change-plan',
+      method: HttpMethods.Post,
+      payload
     })
   },
 

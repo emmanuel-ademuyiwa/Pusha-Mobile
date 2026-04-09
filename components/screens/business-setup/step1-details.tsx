@@ -1,10 +1,11 @@
-import {api} from '@/api'
 import {
   AppCheckBox,
   Box,
   Button,
   Container,
   MultiSelectField,
+  SelectField,
+  SpinnerOverlay,
   TextArea,
   TextField,
   Typography
@@ -12,7 +13,8 @@ import {
 import {KeyboardAwareScrollView} from '@/components/util/keyboard-aware-scroll-view'
 import {errorHandler} from '@/utils/errorHandler'
 import {getFromVault} from '@/utils/storage'
-import {router} from 'expo-router'
+import {useUpdateBusiness} from '@/queries/merchantQuery'
+import {userQuery} from '@/queries/userQueries'
 import {useFormik} from 'formik'
 import React from 'react'
 import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native'
@@ -85,6 +87,14 @@ const DELIVERY_LOCATIONS = [
   {text: 'Zamfara', value: 'zamfara'}
 ]
 
+/** Human-readable state names for API (matches web onboarding) */
+const STATE_OPTIONS = DELIVERY_LOCATIONS.filter(
+  d => d.value !== 'nationwide'
+).map(d => ({
+  text: d.text,
+  value: d.text
+}))
+
 const PAYMENT_METHODS = [
   {label: 'Payment before delivery', value: 'before_delivery'},
   {label: 'Payment on delivery', value: 'on_delivery'}
@@ -96,6 +106,8 @@ type FormValues = {
   sellWhat: string
   businessDescription: string
   businessAddress: string
+  city: string
+  state: string
   deliveryLocations: string[]
   paymentMethods: string[]
 }
@@ -103,12 +115,20 @@ type FormValues = {
 const schema = Yup.object().shape({
   businessName: Yup.string().required('Business name is required'),
   industry: Yup.string().required('Please select your industry'),
+  sellWhat: Yup.string().when('industry', {
+    is: 'other',
+    then: s => s.required('Please describe what you sell'),
+    otherwise: s => s.notRequired()
+  }),
   businessDescription: Yup.string().required('Please describe your business'),
-  businessAddress: Yup.string().required('Business address is required')
+  businessAddress: Yup.string().required('Business address is required'),
+  city: Yup.string().required('City is required'),
+  state: Yup.string().required('State is required')
 })
 
 const Step1Details = ({handleNext}: Step1DetailsProps) => {
   const user = getFromVault('user') as any
+  const {mutateAsync: saveBusiness, isPending} = useUpdateBusiness()
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -117,24 +137,34 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
       sellWhat: '',
       businessDescription: '',
       businessAddress: '',
+      city: '',
+      state: '',
       deliveryLocations: [],
       paymentMethods: []
     },
-    // validationSchema: schema,
+    validationSchema: schema,
     onSubmit: async values => {
       try {
-        // await api.merchants.setupBusiness({
-        //   name: values.businessName.trim(),
-        //   address: values.businessAddress.trim(),
-        //   description: values.businessDescription.trim(),
-        //   business_tags: values.industry,
-        //   currency: 'NGN',
-        //   country: 'Nigeria',
-        //   email: user?.email,
-        //   phone_number: user?.phone_number ?? undefined
-        // })
-        // handleNext()
-        router.replace('/dashboard')
+        const tags =
+          values.industry === 'other' ? values.sellWhat.trim() : values.industry
+        await saveBusiness({
+          name: values.businessName.trim(),
+          address: values.businessAddress.trim(),
+          city: values.city.trim(),
+          state: values.state.trim(),
+          country: 'Nigeria',
+          currency: 'NGN',
+          business_tags: tags,
+          description: values.businessDescription.trim(),
+          email: user?.email ?? '',
+          phone_number: user?.phone_number,
+          business_category:
+            values.industry === 'other' ? 'other' : values.industry,
+          delivery_locations: values.deliveryLocations.join(','),
+          payment_preferences: values.paymentMethods.join(',')
+        })
+        await userQuery()
+        handleNext()
       } catch (err) {
         errorHandler(err)
       }
@@ -150,7 +180,7 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
   }
 
   return (
-    <>
+    <SpinnerOverlay show={formik.isSubmitting || isPending}>
       <KeyboardAwareScrollView>
         <Container>
           <Box mt={16} gap={20} pb={32}>
@@ -158,7 +188,7 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
               <Typography variant="h2-bold" color="secondary-500">
                 Tell us about your business
               </Typography>
-              <Typography variant="body" color="neutral-500">
+              <Typography variant="body" color="neutral-800">
                 Your AI assistant uses this to introduce itself to every
                 customer
               </Typography>
@@ -195,7 +225,7 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
                     *
                   </Typography>
                 </Typography>
-                <Typography variant="c1" color="neutral-400">
+                <Typography variant="c1" color="neutral-600">
                   Select a category
                 </Typography>
               </Box>
@@ -240,6 +270,11 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
                   value={formik.values.sellWhat}
                   onChangeText={formik.handleChange('sellWhat')}
                   blurAction={formik.setFieldTouched}
+                  error={
+                    formik.touched.sellWhat && formik.errors.sellWhat
+                      ? formik.errors.sellWhat
+                      : ''
+                  }
                 />
               )}
             </Box>
@@ -252,7 +287,7 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
                   *
                 </Typography>
               </Typography>
-              <Typography variant="c1" color="neutral-400" mb={6}>
+              <Typography variant="c1" color="neutral-600" mb={6}>
                 Your AI uses this to introduce your business to every customer
               </Typography>
               <TextArea
@@ -296,6 +331,48 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
               />
             </Box>
 
+            {/* City */}
+            <Box>
+              <Typography variant="c1-medium" color="neutral-600" mb={6}>
+                City{' '}
+                <Typography variant="c1-medium" color="error-100">
+                  *
+                </Typography>
+              </Typography>
+              <TextField
+                name="city"
+                placeholder="e.g. Lagos"
+                value={formik.values.city}
+                onChangeText={formik.handleChange('city')}
+                blurAction={formik.setFieldTouched}
+                error={
+                  formik.touched.city && formik.errors.city
+                    ? formik.errors.city
+                    : ''
+                }
+              />
+            </Box>
+
+            {/* State */}
+            <Box>
+              <SelectField
+                name="state"
+                label="State *"
+                placeholder="Select state"
+                items={STATE_OPTIONS}
+                value={formik.values.state}
+                onChangeValue={value =>
+                  formik.setFieldValue('state', value ?? '')
+                }
+                search
+              />
+              {formik.touched.state && formik.errors.state ? (
+                <Typography variant="c1" color="error-100" mt={4}>
+                  {formik.errors.state}
+                </Typography>
+              ) : null}
+            </Box>
+
             {/* Delivery locations */}
             <Box>
               <Typography variant="c1-medium" color="neutral-600" mb={6}>
@@ -318,7 +395,7 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
                 <Typography variant="c1-medium" color="neutral-600">
                   Payment preference
                 </Typography>
-                <Typography variant="c1" color="neutral-400">
+                <Typography variant="c1" color="neutral-600">
                   How do you accept payment? Select all that apply.
                 </Typography>
               </Box>
@@ -356,12 +433,12 @@ const Step1Details = ({handleNext}: Step1DetailsProps) => {
           <Button
             // hasLinearGradient
             label="Continue"
-            loading={formik.isSubmitting}
+            loading={formik.isSubmitting || isPending}
             onPress={() => formik.handleSubmit()}
           />
         </Box>
       </Container>
-    </>
+    </SpinnerOverlay>
   )
 }
 

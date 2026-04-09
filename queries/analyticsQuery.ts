@@ -406,6 +406,8 @@ export const useTopProducts = (
     limit?: number
     date_from?: string
     date_to?: string
+    /** Least selling = lowest revenue among products with sales in period */
+    mode?: 'top' | 'least'
   },
   enabled = true
 ) => {
@@ -496,13 +498,22 @@ export const useTopProducts = (
           })
         })
         
-        // Convert to array and sort by total revenue
-        let topProducts = Array.from(productStats.values())
-          .sort((a, b) => b.total_revenue - a.total_revenue)
-          .slice(0, query?.limit || 5)
+        const mode = query?.mode ?? 'top'
+        const sorted = Array.from(productStats.values()).sort((a, b) =>
+          mode === 'least'
+            ? a.total_revenue - b.total_revenue
+            : b.total_revenue - a.total_revenue
+        )
+
+        const withSales =
+          mode === 'least'
+            ? sorted.filter(p => (p.total_revenue ?? 0) > 0 || (p.total_quantity ?? 0) > 0)
+            : sorted
+
+        let topProducts = withSales.slice(0, query?.limit || 5)
         
-        // If no sales data or no top products, fall back to available products
-        if (topProducts.length === 0) {
+        // If no sales data or no top products, fall back to available products (top sellers only)
+        if (topProducts.length === 0 && mode !== 'least') {
           const productsResponse = await api.products.listProducts()
           const products = productsResponse?.data?.data?.records || []
           
@@ -528,5 +539,78 @@ export const useTopProducts = (
     enabled,
     // staleTime: 1000 * 60 * 5, // 5 minutes
     // gcTime: 1000 * 60 * 10 // 10 minutes
+  })
+}
+
+const formatDateForAPI = (isoString: string | undefined) => {
+  if (!isoString) return undefined
+  return new Date(isoString).toISOString().split('T')[0]
+}
+
+/**
+ * Estimated gross profit for a date range: sale line revenue minus product cost × qty (from catalog).
+ */
+export const usePeriodProfit = (
+  filters: {
+    period: string
+    date_from?: string
+    date_to?: string
+  },
+  enabled = true
+) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.PERIOD_PROFIT, filters],
+    queryFn: async () => {
+      try {
+        const [salesResponse, productsResponse] = await Promise.all([
+          api.sales.listSales({
+            date_range: {
+              start: formatDateForAPI(filters.date_from),
+              end: formatDateForAPI(filters.date_to),
+            },
+            limit: 1000,
+          }),
+          api.products.listProducts({limit: 1000}),
+        ])
+
+        const sales = salesResponse?.data?.data?.records || []
+        const products = productsResponse?.data?.data?.records || []
+        const costById = new Map<string, number>(
+          products.map((p: any) => [p.id, Number(p.cost_price) || 0])
+        )
+
+        const filterDateRange = {
+          from: filters.date_from ? new Date(filters.date_from) : null,
+          to: filters.date_to ? new Date(filters.date_to) : null,
+        }
+
+        const inRange = (sale: any) => {
+          if (!filterDateRange.from || !filterDateRange.to) return true
+          const saleDate = new Date(
+            sale.created_at || sale.sale_date || sale.createdAt || sale.date || new Date()
+          )
+          if (isNaN(saleDate.getTime())) return false
+          return saleDate >= filterDateRange.from && saleDate <= filterDateRange.to
+        }
+
+        let profit = 0
+        for (const sale of sales.filter(inRange)) {
+          for (const item of sale.sale_items || []) {
+            const revenue =
+              item.total_price ??
+              (Number(item.unit_price) || 0) * (Number(item.quantity) || 0)
+            const cost = (costById.get(item.product_id) ?? 0) * (Number(item.quantity) || 0)
+            profit += revenue - cost
+          }
+        }
+
+        return Math.max(0, profit)
+      } catch {
+        return 0
+      }
+    },
+    enabled,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   })
 }

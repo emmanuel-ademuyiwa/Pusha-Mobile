@@ -2,13 +2,11 @@ import * as Haptics from 'expo-haptics'
 import React, {PropsWithChildren} from 'react'
 import {Keyboard} from 'react-native'
 
-import * as LucideIcons from 'lucide-react-native'
 import AppIcon from '../app-icon'
 import Box from '../box'
 import AppPressable from '../pressable'
 import Typography, {TypographyProps} from '../typography'
 
-type IconName = keyof typeof LucideIcons
 export interface TextActionProps extends TypographyProps {
   variant?:
     | 'c1-bold'
@@ -17,7 +15,7 @@ export interface TextActionProps extends TypographyProps {
     | 'h3-bold'
     | 'h2-bold'
     | 'h1-bold'
-  iconName?: IconName
+  iconName?: string
   iconPosition?: 'start' | 'end'
   iconColor?: string
   onPress?: () => void

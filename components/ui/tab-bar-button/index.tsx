@@ -69,6 +69,7 @@ export const TabBarButton = ({
         name={focused ? tab.selectedIcon : tab.icon}
         size={24}
         color={color}
+        variant={focused ? 'Bold' : 'Outline'}
       />
       <Typography
         marginTop={4}

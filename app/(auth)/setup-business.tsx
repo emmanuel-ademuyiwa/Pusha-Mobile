@@ -44,14 +44,14 @@ const StepProgress = ({current}: {current: OnboardingStep}) => {
                 ) : (
                   <Typography
                     variant="c1-medium"
-                    color={isActive ? 'white' : 'neutral-400'}>
+                    color={isActive ? 'white' : 'neutral-900'}>
                     {stepNum}
                   </Typography>
                 )}
               </Box>
-              <Typography
-                variant="c1"
-                color={isActive || isComplete ? 'primary-300' : 'neutral-400'}>
+                <Typography
+                  variant="c1"
+                  color={isActive || isComplete ? 'primary-300' : 'neutral-700'}>
                 {label}
               </Typography>
             </Box>

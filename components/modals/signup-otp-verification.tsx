@@ -94,7 +94,7 @@ const SignupOtpVerificationModal = ({
           <Box mt={16} width={'100%'}>
             <Button
               label="Continue"
-              onPress={() => router.replace('/(auth)/setup-business')}
+              onPress={() => router.replace('/fresh-login')}
             />
           </Box>
         </Box>
@@ -120,6 +120,7 @@ const SignupOtpVerificationModal = ({
           <OtpInput
             otp={otp}
             setOTP={setOTP}
+            length={6}
             setIsInputFilled={setIsInputFilled}
           />
 

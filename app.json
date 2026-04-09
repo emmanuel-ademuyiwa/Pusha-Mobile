@@ -89,6 +89,7 @@
         "DEV_BASE_URL": "https://pusha-beta-6ubbw.ondigitalocean.app",
         "CLOUDINARY_NAME": "delzblzt7"
       },
+      "DASHBOARD_CHAT_SOCKET_URL": "wss://api-beta.pushahq.com/webchat",
       "router": {},
       "eas": {
         "projectId": "b12e24da-db0f-42c4-b443-ce833c629d30"

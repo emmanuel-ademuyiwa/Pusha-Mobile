@@ -26,6 +26,9 @@ export interface ISetupBusinessPayload {
   email: string
   phone_number?: string
   ai_order_threshold?: number
+  business_category?: string
+  delivery_locations?: string
+  payment_preferences?: string
 }
 
 export default {
@@ -39,6 +42,13 @@ export default {
   fetchBusiness: () => {
     return UseEndpoint({
       endpoint: '/business'
+    })
+  },
+  updateAssistant: (payload: {name: string}) => {
+    return UseEndpoint({
+      endpoint: '/business/assistant',
+      payload,
+      method: HttpMethods.Patch
     })
   }
 }

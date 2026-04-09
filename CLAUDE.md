@@ -132,15 +132,15 @@ export const useListProducts = () => {
 ### Common Commands
 
 ```bash
-# Development
-npm run start              # Start Expo dev server
-npm run dev:ios           # Start with iOS
-npm run dev:android       # Start with Android
-npm run lint              # Run ESLint
+# Development (package manager: pnpm)
+pnpm run start              # Start Expo dev server
+pnpm run dev:ios           # Start with iOS
+pnpm run dev:android       # Start with Android
+pnpm run lint              # Run ESLint
 
 # Building
-npm run android           # Run on Android
-npm run ios              # Run on iOS
+pnpm run android           # Run on Android
+pnpm run ios              # Run on iOS
 ```
 
 ### File Naming Conventions

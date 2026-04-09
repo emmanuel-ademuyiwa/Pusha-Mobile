@@ -6,6 +6,7 @@ import {create} from 'zustand'
 
 import {OtpContext} from '@/libs'
 import {userQuery} from '@/queries/userQueries'
+import {needsBusinessOnboarding} from '@/utils/needs-business-onboarding'
 import {errorHandler} from '@/utils/errorHandler'
 import {
   clearSession,
@@ -151,9 +152,21 @@ const useAuthStore = create<AuthStoreType>()((set, get) => {
               saveToVault('refreshToken', data?.refresh_token)
             }
 
-            // Always call routeUser() so the fresh profile from the API is
-            // saved to vault — routing to dashboard or setup-business is
-            // decided inside routeUser() based on the fetched profile.
+            const loginUser = data?.user
+
+            // No `user.business` (or no business id) → skip GET /user and go to setup
+            if (needsBusinessOnboarding(loginUser)) {
+              saveToVault(
+                'user',
+                loginUser ?? {email: email.trim().toLowerCase()}
+              )
+              router.dismissTo('/(auth)/setup-business')
+              set(state => ({
+                loadingState: {...state.loadingState, loginUser: false}
+              }))
+              return
+            }
+
             await get().actions.routeUser()
 
             set(state => ({
@@ -403,7 +416,7 @@ const useAuthStore = create<AuthStoreType>()((set, get) => {
           if (user) {
             saveToVault('user', user)
 
-            if (user?.business && user?.business_id) {
+            if (!needsBusinessOnboarding(user)) {
               router.replace('/dashboard')
             } else {
               router.dismissTo('/(auth)/setup-business')

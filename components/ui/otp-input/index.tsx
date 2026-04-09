@@ -36,13 +36,13 @@ export const OtpInput = ({
       <Box
         key={index}
         style={{
-          width: 56,
-          height: 56,
+          width: 40,
+          height: 40,
           backgroundColor: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: 16,
+          borderRadius: 8,
           marginHorizontal: 4,
           padding: 0,
           borderWidth: 1,
@@ -50,7 +50,7 @@ export const OtpInput = ({
         }}>
         {showCursor() && <BlinkingCursor />}
         {!showCursor() && (
-          <Typography variant="h1-bold" fontSize={48} lineHeight={55} color="neutral-900">
+          <Typography variant="h1-bold" color="neutral-900">
             {digit}
           </Typography>
         )}

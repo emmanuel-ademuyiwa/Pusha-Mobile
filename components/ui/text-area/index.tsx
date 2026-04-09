@@ -65,7 +65,7 @@ export const TextArea = forwardRef<never, TextAreaProps>(
         paddingVertical: 10,
         borderStyle: 'solid',
         borderWidth: 2,
-        backgroundColor: !disabled ? '#f5f5f5' : '#EBEBEB',
+        backgroundColor: !disabled ? "#ffffff" : '#EBEBEB',
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
@@ -73,7 +73,7 @@ export const TextArea = forwardRef<never, TextAreaProps>(
         justifyContent: 'space-between'
       },
       input: {
-        color: disabled ? '#798390' : '#111111',
+        color: disabled ? '#798390' : '#45505F',
         height: '100%',
         flex: 1,
         padding: 0
@@ -104,7 +104,7 @@ export const TextArea = forwardRef<never, TextAreaProps>(
             maxHeight={120}
             style={[
               styles.inputContainer,
-              {borderColor: focus ? '#80A6F9' : '#f5f5f5'}
+              {borderColor: focus ? '#2554C7' : '#E9EAEB'}
             ]}>
             <TextInput
               scrollEnabled

@@ -1,5 +1,6 @@
 export enum QUERY_KEYS {
   USER = 'user',
+  BUSINESS = 'business',
   BUSINESS_INTEGRATION = 'business_integration',
   STORE_CONFIG_OPTIONS = 'store-config-options',
   PRODUCTS = 'products',
@@ -17,6 +18,7 @@ export enum QUERY_KEYS {
   ORDERS_BY_STATUS = 'orders-by-status',
   ORDER = 'order',
   DASHBOARD_STATS = 'dashboard-stats',
+  PERIOD_PROFIT = 'period-profit',
   SETTLED_PAYMENTS = 'settled-payments',
   SETTLED_PAYMENT = 'settled-payment',
   PENDING_PAYMENTS = 'pending-payments',

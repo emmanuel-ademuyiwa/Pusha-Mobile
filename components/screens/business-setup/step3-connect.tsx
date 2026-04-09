@@ -1,4 +1,11 @@
-import {AppIcon, Box, Button, Container, Typography} from '@/components/ui'
+import {
+  AppIcon,
+  Box,
+  Button,
+  Container,
+  TextAction,
+  Typography
+} from '@/components/ui'
 import {KeyboardAwareScrollView} from '@/components/util/keyboard-aware-scroll-view'
 import React from 'react'
 import {StyleSheet, Text, TouchableOpacity} from 'react-native'
@@ -20,7 +27,7 @@ const Step3Connect = ({handleNext, handleBack}: Step3ConnectProps) => {
             <Typography variant="h2-bold" color="secondary-500">
               Connect your channels
             </Typography>
-            <Typography variant="body" color="neutral-500">
+            <Typography variant="body" color="neutral-800">
               Reach customers on WhatsApp, Facebook & Instagram — all in one
               place
             </Typography>
@@ -42,7 +49,7 @@ const Step3Connect = ({handleNext, handleBack}: Step3ConnectProps) => {
                 <Typography variant="body-bold" color="secondary-500">
                   Meta — Facebook & Instagram
                 </Typography>
-                <Typography variant="c1" color="neutral-500">
+                <Typography variant="c1" color="neutral-700">
                   One connection unlocks WhatsApp, Facebook, and Instagram
                   messaging for your AI
                 </Typography>
@@ -120,14 +127,11 @@ const Step3Connect = ({handleNext, handleBack}: Step3ConnectProps) => {
                 />
               </Box>
             </Box>
-            <TouchableOpacity activeOpacity={0.7} onPress={handleNext}>
-              <Typography
-                variant="c1"
-                color="neutral-400"
-                textAlign="center">
-                Skip for now — connect from Settings later
-              </Typography>
-            </TouchableOpacity>
+            <Box mt={24} justifyContent="center" alignItems="center">
+              <TextAction iconName="ArrowRight" onPress={handleNext}>
+                Skip
+              </TextAction>
+            </Box>
           </Box>
         </Box>
       </Container>
