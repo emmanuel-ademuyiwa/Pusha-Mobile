@@ -2,19 +2,49 @@ import { HttpMethods } from '@/libs'
 import { ICreateProductPayload } from '@/types'
 import { UseEndpoint } from '@/utils/api'
 
+function mapToTextUploadPayload(payload: ICreateProductPayload) {
+  const brand = payload.brand?.trim()
+  const desc = payload.description?.trim() ?? ''
+  const description = brand
+    ? desc
+      ? `Brand: ${brand}\n\n${desc}`
+      : `Brand: ${brand}`
+    : desc || '—'
+
+  const image_urls = (payload.images ?? []).filter(Boolean).join(',')
+
+  return {
+    name: payload.name.trim(),
+    category: (payload.category ?? '').trim(),
+    description,
+    tags: payload.tags ?? [],
+    unit_price: payload.unit_price,
+    discount_price: payload.discount_price ?? 0,
+    is_available: payload.visible,
+    image_urls
+  }
+}
+
 export default {
   createProduct: (payload: ICreateProductPayload) => {
     return UseEndpoint({
-      endpoint: `/products`,
+      endpoint: `/products/upload/text`,
       method: HttpMethods.Post,
-      payload: payload
+      payload: mapToTextUploadPayload(payload)
     })
   },
-  createProductsWithFile: (storeId: string, payload: any) => {
+  uploadProductFile: (formData: FormData) => {
     return UseEndpoint({
-      endpoint: `/products`,
+      endpoint: `/products/upload/file`,
       method: HttpMethods.Post,
-      payload: payload
+      payload: formData
+    })
+  },
+  createProductsWithFile: (_storeId: string, payload: FormData) => {
+    return UseEndpoint({
+      endpoint: `/products/upload/file`,
+      method: HttpMethods.Post,
+      payload
     })
   },
   listProducts: (query?: {page?: number; limit?: number; search?: string}) => {

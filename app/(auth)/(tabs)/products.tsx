@@ -10,7 +10,6 @@ import {
   PushaActivityIndicator,
   Typography
 } from '@/components/ui'
-import {AppView} from '@/components/ui/app-view'
 import {SearchField} from '@/components/ui/search-field'
 import {useListProducts, type IProduct} from '@/queries/productsQuery'
 import {StatusBar} from 'expo-status-bar'
@@ -19,14 +18,18 @@ import React, {useMemo, useRef, useState} from 'react'
 import {FlatList, TouchableOpacity} from 'react-native'
 import {ScreenView} from '@/components/util/screen-view'
 
+type AvailabilityFilter = null | 'available' | 'unavailable'
+
 const Products = () => {
   const addProductRef = useRef<Modal>(null)
   const [search, setSearch] = useState('')
+  const [availabilityFilter, setAvailabilityFilter] =
+    useState<AvailabilityFilter>(null)
 
   const {data, isLoading, isError, refetch} = useListProducts()
   const allProducts: IProduct[] = useMemo(() => data?.records ?? [], [data])
 
-  const filtered = useMemo(() => {
+  const searchFiltered = useMemo(() => {
     if (!search.trim()) return allProducts
     const q = search.toLowerCase()
     return allProducts.filter(
@@ -35,6 +38,30 @@ const Products = () => {
         (p.brand ?? '').toLowerCase().includes(q)
     )
   }, [allProducts, search])
+
+  const filtered = useMemo(() => {
+    if (availabilityFilter === 'available') {
+      return searchFiltered.filter(p => p.is_available)
+    }
+    if (availabilityFilter === 'unavailable') {
+      return searchFiltered.filter(p => !p.is_available)
+    }
+    return searchFiltered
+  }, [searchFiltered, availabilityFilter])
+
+  const toggleAvailabilityStat = (key: 'total' | 'available' | 'unavailable') => {
+    if (key === 'total') {
+      setAvailabilityFilter(null)
+      return
+    }
+    if (key === 'available') {
+      setAvailabilityFilter(prev => (prev === 'available' ? null : 'available'))
+      return
+    }
+    setAvailabilityFilter(prev =>
+      prev === 'unavailable' ? null : 'unavailable'
+    )
+  }
 
   // Stats
   const total = allProducts.length
@@ -86,45 +113,65 @@ const Products = () => {
         {/* ── Stats row ── */}
         {!isLoading && (
           <Box flexDirection="row" gap={8} mb={16}>
-            <Box
-              flex={1}
-              alignItems="center"
-              paddingVertical={10}
-              borderRadius={10}
-              backgroundColor="neutral-100">
-              <Typography variant="h3-bold" color="secondary-500">
-                {total}
-              </Typography>
-              <Typography variant="c2" color="neutral-600" mt={2}>
-                Total Products
-              </Typography>
-            </Box>
-            <Box
-              flex={1}
-              alignItems="center"
-              paddingVertical={10}
-              borderRadius={10}
-              style={{backgroundColor: '#F6FDF8'}}>
-              <Typography variant="h3-bold" style={{color: '#20B038'}}>
-                {available}
-              </Typography>
-              <Typography variant="c2" color="neutral-600" mt={2}>
-                Available
-              </Typography>
-            </Box>
-            <Box
-              flex={1}
-              alignItems="center"
-              paddingVertical={10}
-              borderRadius={10}
-              style={{backgroundColor: '#FFF5F6'}}>
-              <Typography variant="h3-bold" style={{color: '#D70015'}}>
-                {unavailable}
-              </Typography>
-              <Typography variant="c2" color="neutral-600" mt={2}>
-                Unavailable
-              </Typography>
-            </Box>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              style={{flex: 1}}
+              onPress={() => toggleAvailabilityStat('total')}>
+              <Box
+                alignItems="center"
+                paddingVertical={10}
+                borderRadius={10}
+                backgroundColor="neutral-100">
+                <Typography variant="h3-bold" color="secondary-500">
+                  {total}
+                </Typography>
+                <Typography variant="c2" color="neutral-600" mt={2}>
+                  Total Products
+                </Typography>
+              </Box>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              style={{flex: 1}}
+              onPress={() => toggleAvailabilityStat('available')}>
+              <Box
+                alignItems="center"
+                paddingVertical={10}
+                borderRadius={10}
+                style={{
+                  backgroundColor: '#F6FDF8',
+                  borderWidth: availabilityFilter === 'available' ? 2 : 0,
+                  borderColor: '#20B038'
+                }}>
+                <Typography variant="h3-bold" style={{color: '#20B038'}}>
+                  {available}
+                </Typography>
+                <Typography variant="c2" color="neutral-600" mt={2}>
+                  Available
+                </Typography>
+              </Box>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              style={{flex: 1}}
+              onPress={() => toggleAvailabilityStat('unavailable')}>
+              <Box
+                alignItems="center"
+                paddingVertical={10}
+                borderRadius={10}
+                style={{
+                  backgroundColor: '#FFF5F6',
+                  borderWidth: availabilityFilter === 'unavailable' ? 2 : 0,
+                  borderColor: '#D70015'
+                }}>
+                <Typography variant="h3-bold" style={{color: '#D70015'}}>
+                  {unavailable}
+                </Typography>
+                <Typography variant="c2" color="neutral-600" mt={2}>
+                  Unavailable
+                </Typography>
+              </Box>
+            </TouchableOpacity>
           </Box>
         )}
 
@@ -160,7 +207,9 @@ const Products = () => {
               description={
                 search
                   ? 'Try a different search term.'
-                  : 'Add your first product to get started.'
+                  : availabilityFilter
+                    ? 'No products match this filter.'
+                    : 'Add your first product to get started.'
               }
               actionText="Add Product"
               onAction={() => addProductRef.current?.present()}

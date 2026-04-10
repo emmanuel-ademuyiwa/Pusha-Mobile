@@ -1,4 +1,6 @@
 import {
+  AppIcon,
+  AppPressable,
   Box,
   Button,
   PageError,
@@ -21,24 +23,24 @@ import {
 } from '@/utils/chatSessionDisplay'
 import {connectDashboardChatSocket} from '@/utils/dashboardChatSocket'
 import {getFromVault} from '@/utils/storage'
-import {useLocalSearchParams} from 'expo-router'
-import React, {useCallback, useEffect, useMemo, useRef} from 'react'
-import {ActivityIndicator, StyleSheet} from 'react-native'
+import {router, useLocalSearchParams} from 'expo-router'
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import {ActivityIndicator, Pressable, StyleSheet} from 'react-native'
 import {
   Bubble,
   BubbleProps,
   GiftedChat,
   IMessage,
   InputToolbar,
-  Send,
   SendProps
 } from 'react-native-gifted-chat'
 import {useQueryClient} from '@tanstack/react-query'
 import type {Socket} from 'socket.io-client'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
-const MERCHANT_USER = {_id: 'merchant' as const, name: 'You'}
-const CUSTOMER_USER = {_id: 'customer' as const, name: 'Customer'}
+/** Stable ids for GiftedChat alignment (left = customer, right = merchant). */
+const MERCHANT_ID = 'merchant' as const
+const CUSTOMER_ID = 'customer' as const
 
 /** Align with web chat-inbox message fetch depth */
 const CHAT_LIST_QUERY = {page: 1, limit: 1000000} as const
@@ -69,7 +71,12 @@ function isOutbound(item: ChatApiMessage): boolean {
   return item.sender_type === 'merchant'
 }
 
-function toGiftedMessages(rows: ChatApiMessage[]): IMessage[] {
+function toGiftedMessages(
+  rows: ChatApiMessage[],
+  names: {merchant: string; customer: string}
+): IMessage[] {
+  const merchantUser = {_id: MERCHANT_ID, name: names.merchant}
+  const customerUser = {_id: CUSTOMER_ID, name: names.customer}
   const mapped: IMessage[] = rows.map((item, index) => {
     const id = item.id ?? `row-${index}`
     const isMerchant = isOutbound(item)
@@ -79,7 +86,7 @@ function toGiftedMessages(rows: ChatApiMessage[]): IMessage[] {
       _id: id,
       text,
       createdAt: created,
-      user: isMerchant ? MERCHANT_USER : CUSTOMER_USER
+      user: isMerchant ? merchantUser : customerUser
     }
   })
   return mapped.sort((a, b) => {
@@ -181,6 +188,9 @@ const Page = () => {
   const {chatId} = useLocalSearchParams<{chatId: string}>()
   const queryClient = useQueryClient()
   const socketRef = useRef<Socket | null>(null)
+  const [chatSocketStatus, setChatSocketStatus] = useState<
+    'connected' | 'disconnected'
+  >('disconnected')
 
   const {
     data,
@@ -210,7 +220,32 @@ const Page = () => {
 
   const navTitle = useMemo(
     () => (
-      <ChatNavTitle session={chatSession} listLoading={chatsListLoading} />
+      <Box
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        my={12}>
+          <AppPressable onPress={() => router.back()} marginRight={10}>
+            <AppIcon name="ChevronLeft" size={24} color="black" />
+          </AppPressable>
+        <ChatNavTitle session={chatSession} listLoading={chatsListLoading} />
+
+        <Button
+          size="sm"
+          variant={humanHasControl ? 'primary' : 'outline'}
+          label={humanHasControl ? 'Hand over' : 'Take over'}
+          loading={isTogglingControl}
+          disabled={isTogglingControl}
+          onPress={() => {
+            if (!chatId || isTogglingControl) return
+            if (humanHasControl) {
+              handOverMutation.mutate(chatId)
+            } else {
+              takeOverMutation.mutate(chatId)
+            }
+          }}
+        />
+      </Box>
     ),
     [chatSession, chatsListLoading]
   )
@@ -245,10 +280,28 @@ const Page = () => {
     handOverMutation
   ])
 
+  const chatDisplayNames = useMemo(() => {
+    const vaultUser = getFromVault('user') as {name?: string} | undefined
+    const merchant =
+      typeof vaultUser?.name === 'string' && vaultUser.name.trim()
+        ? vaultUser.name.trim()
+        : 'You'
+    const customer = chatSession ? getCustomerName(chatSession) : 'Visitor'
+    return {merchant, customer}
+  }, [chatSession])
+
+  const merchantUser = useMemo(
+    () => ({_id: MERCHANT_ID, name: chatDisplayNames.merchant}),
+    [chatDisplayNames.merchant]
+  )
+
   const serverMessages = useMemo(() => {
     const rows = extractMessages(data)
-    return toGiftedMessages(rows)
-  }, [data])
+    return toGiftedMessages(rows, {
+      merchant: chatDisplayNames.merchant,
+      customer: chatDisplayNames.customer
+    })
+  }, [data, chatDisplayNames])
 
   const messages = useMemo(() => serverMessages, [serverMessages])
 
@@ -267,6 +320,13 @@ const Page = () => {
       token
     })
     socketRef.current = socket
+
+    const syncSocketStatus = () => {
+      setChatSocketStatus(socket.connected ? 'connected' : 'disconnected')
+    }
+    syncSocketStatus()
+    socket.on('connect', syncSocketStatus)
+    socket.on('disconnect', syncSocketStatus)
 
     const handleChatResponse = (payload: unknown) => {
       const d = payload as Record<string, unknown>
@@ -307,6 +367,8 @@ const Page = () => {
     socket.on('chat-response', handleChatResponse)
 
     return () => {
+      socket.off('connect', syncSocketStatus)
+      socket.off('disconnect', syncSocketStatus)
       socket.off('chat-response', handleChatResponse)
       socket.disconnect()
       if (socketRef.current === socket) socketRef.current = null
@@ -358,16 +420,34 @@ const Page = () => {
     )
   }, [])
 
-  const renderSend = useCallback((props: SendProps<IMessage>) => {
-    return (
-      <Send
-        {...props}
-        label="Send"
-        textStyle={styles.sendText}
-        containerStyle={styles.sendContainer}
-      />
-    )
-  }, [])
+  const renderSend = useCallback(
+    (props: SendProps<IMessage>) => {
+      const text = props.text?.trim() ?? ''
+      const canSend =
+        chatSocketStatus === 'connected' &&
+        text.length > 0 &&
+        !props.disabled &&
+        typeof props.onSend === 'function'
+
+      return (
+        <Pressable
+          style={({pressed}) => [
+            styles.sendButton,
+            !canSend && styles.sendButtonMuted,
+            pressed && canSend && styles.sendButtonPressed
+          ]}
+          onPress={() => {
+            if (!canSend || !props.onSend) return
+            props.onSend({text} as Partial<IMessage>, true)
+          }}
+          disabled={!canSend}
+          hitSlop={{top: 4, bottom: 4, left: 4, right: 4}}>
+          <AppIcon name="Send" size={16} color="#fff" />
+        </Pressable>
+      )
+    },
+    [chatSocketStatus]
+  )
 
   const renderInputToolbar = useCallback(
     (props: React.ComponentProps<typeof InputToolbar>) => {
@@ -376,9 +456,15 @@ const Page = () => {
           <Box
             paddingHorizontal={16}
             paddingVertical={14}
-            style={{borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#E9EAEB'}}
+            style={{
+              borderTopWidth: StyleSheet.hairlineWidth,
+              borderTopColor: 'white'
+            }}
             backgroundColor="neutral-100">
-            <Typography variant="c1" color="neutral-600" style={{textAlign: 'center'}}>
+            <Typography
+              variant="c1"
+              color="neutral-600"
+              style={{textAlign: 'center'}}>
               Take over this chat to reply. Use the button above.
             </Typography>
           </Box>
@@ -415,12 +501,10 @@ const Page = () => {
   if (isLoading && data == null) {
     return (
       <ScreenView
-        navTitle={navTitle}
-        alignNav="center"
         hasTopBanner={false}
         footerPadding={false}
-        headerAction={headerAction}
-        headerDivider>
+        backButton={false}
+        headerAction={navTitle}>
         <Box flex={1} alignItems="center" justifyContent="center">
           <PushaActivityIndicator />
         </Box>
@@ -430,17 +514,16 @@ const Page = () => {
 
   return (
     <ScreenView
-      navTitle={navTitle}
-      alignNav="center"
       hasTopBanner={false}
-      footerPadding={false}
-      headerAction={headerAction}
-      headerDivider>
+      footerPadding={true}
+      backButton={false}
+      headerAction={navTitle}>
       <Box flex={1}>
         <GiftedChat
           messages={messages}
           onSend={onSend}
-          user={MERCHANT_USER}
+          user={merchantUser}
+          // renderUsernameOnMessage
           renderBubble={renderBubble}
           bottomOffset={insets.bottom}
           messagesContainerStyle={styles.messagesContainer}
@@ -450,6 +533,7 @@ const Page = () => {
           textInputProps={{
             editable: humanHasControl
           }}
+          alwaysShowSend={true}
           renderSend={renderSend}
           renderInputToolbar={renderInputToolbar}
           renderChatEmpty={() => (
@@ -466,6 +550,12 @@ const Page = () => {
               </Typography>
             </Box>
           )}
+          {...({
+            containerStyle: {
+              left: styles.messageRowLeft,
+              right: styles.messageRowRight
+            }
+          } as Record<string, unknown>)}
         />
       </Box>
     </ScreenView>
@@ -474,10 +564,26 @@ const Page = () => {
 
 const styles = StyleSheet.create({
   messagesContainer: {flex: 1},
-  bubbleRight: {backgroundColor: '#2554C7'},
+  messageRowLeft: {marginBottom: 10},
+  messageRowRight: {marginBottom: 10},
+  bubbleRight: {backgroundColor: '#2554C7', paddingVertical: 4},
   bubbleLeft: {backgroundColor: '#F5F5F5'},
   bubbleTextRight: {color: '#fff', fontSize: 14},
   bubbleTextLeft: {color: '#142952', fontSize: 14},
+  sendButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#2554C7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+    marginBottom: 4,
+    flexShrink: 0,
+    alignSelf: 'flex-end'
+  },
+  sendButtonMuted: {opacity: 0.35},
+  sendButtonPressed: {opacity: 0.85},
   sendContainer: {
     justifyContent: 'center',
     alignItems: 'center',

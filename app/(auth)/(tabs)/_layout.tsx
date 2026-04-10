@@ -36,11 +36,7 @@ const TabBar = ({state, navigation}: BottomTabBarProps) => {
   const insets = useSafeAreaInsets()
 
   return (
-    <View
-      style={[
-        styles.tabBar,
-        {paddingBottom: Platform.OS === 'ios' ? Math.max(insets.bottom, 16) : 8}
-      ]}>
+    <View style={[styles.tabBar, {paddingBottom: Math.max(insets.bottom, 16)}]}>
       {state.routes.map((route, index) => {
         const tab = TABS.find(t => t.name === route.name)
         if (!tab) return null
@@ -91,8 +87,6 @@ export default function TabLayout() {
       <Tabs.Screen name="products" />
       <Tabs.Screen name="chats" />
       <Tabs.Screen name="more" />
-      {/* Customers remains accessible as a route but is not shown in the tab bar */}
-      <Tabs.Screen name="customers" options={{href: null}} />
     </Tabs>
   )
 }

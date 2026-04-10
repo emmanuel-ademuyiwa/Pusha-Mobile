@@ -15,6 +15,8 @@ interface ScreenViewProps {
   hasTopBanner?: boolean
   color?: ThemeColors
   alignNav?: 'center' | 'left'
+  /** White nav text/icons on colored backgrounds (e.g. primary hero screens). */
+  navTone?: 'default' | 'inverse'
 }
 
 export const ScreenView: React.FC<
@@ -28,8 +30,10 @@ export const ScreenView: React.FC<
     headerDivider = false,
     footerPadding = true,
     hasTopBanner = true,
-    color = 'white'
+    color = 'white',
+    navTone = 'default'
   } = props
+  const navInverse = navTone === 'inverse'
   return (
     <AppView
       footerPadding={footerPadding}
@@ -47,7 +51,10 @@ export const ScreenView: React.FC<
               gap={props.alignNav !== 'center' ? 8 : undefined}>
               {backButton && (
                 <Box ml={-16}>
-                  <BackButton color="black" customAction={backAction} />
+                  <BackButton
+                    color={navInverse ? 'white' : 'black'}
+                    customAction={backAction}
+                  />
                 </Box>
               )}
               {!backButton && props.alignNav === 'center' && (
@@ -55,7 +62,7 @@ export const ScreenView: React.FC<
               )}
               {props.navTitle && typeof props.navTitle === 'string' ? (
                 <Typography
-                  color="secondary-500"
+                  color={navInverse ? 'white' : 'secondary-500'}
                   fontSize={props.alignNav === 'center' ? 17 : 17}
                   lineHeight={33}
                   variant={'h3-bold'}>

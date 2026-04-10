@@ -12,11 +12,13 @@ import {SegmentedTab} from '@/components/ui/segmented-tab'
 import {KeyboardAwareScrollView} from '@/components/util/keyboard-aware-scroll-view'
 import {cldOptions} from '@/utils/cloudinary'
 import {errorHandler} from '@/utils/errorHandler'
+import toast from '@/utils/toast'
 import {Image} from 'expo-image'
 import React, {useState} from 'react'
-import {StyleSheet, TouchableOpacity, View} from 'react-native'
+import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker'
 import uuid from 'react-native-uuid'
+import * as DocumentPicker from 'expo-document-picker'
 
 interface Step2CatalogueProps {
   handleNext: () => void
@@ -40,6 +42,38 @@ const Step2Catalogue = ({handleNext, handleBack}: Step2CatalogueProps) => {
   const [draftImageUri, setDraftImageUri] = useState<string | null>(null)
   const [pendingProducts, setPendingProducts] = useState<PendingProduct[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [csvUploading, setCsvUploading] = useState(false)
+
+  const handleUploadCsv = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['text/csv', 'text/comma-separated-values', 'application/vnd.ms-excel'],
+        copyToCacheDirectory: true
+      })
+      if (result.canceled || !result.assets?.[0]) return
+      const asset = result.assets[0]
+      setCsvUploading(true)
+      const formData = new FormData()
+      formData.append('file', {
+        uri: asset.uri,
+        name: asset.name ?? 'products.csv',
+        type: asset.mimeType ?? 'text/csv'
+      } as unknown as Blob)
+      await api.products.uploadProductFile(formData)
+      toast.success('CSV uploaded — your products will be imported.')
+    } catch (err) {
+      errorHandler(err)
+    } finally {
+      setCsvUploading(false)
+    }
+  }
+
+  const handleDownloadTemplate = () => {
+    Alert.alert(
+      'Product CSV template',
+      'Use columns that match your dashboard export, or add products manually for now.'
+    )
+  }
 
   const canAddProduct =
     draftName.trim().length > 0 &&
@@ -114,8 +148,9 @@ const Step2Catalogue = ({handleNext, handleBack}: Step2CatalogueProps) => {
           const unitPrice = Number.parseFloat(String(p.price).replace(/,/g, ''))
           return api.products.createProduct({
             name: p.name,
+            category: '',
             description: p.brand
-              ? `Brand: ${p.brand}`
+              ? `Brand: ${p.brand}\n\nAdded during business setup`
               : 'Added during business setup',
             tags: [],
             images,
@@ -246,15 +281,25 @@ const Step2Catalogue = ({handleNext, handleBack}: Step2CatalogueProps) => {
         </Box>
         <Box flexDirection="row" gap={8} style={{width: '100%', maxWidth: 280}}>
           <Box flex={1}>
-            <Button variant="outline" label="Template" onPress={() => {}} />
+            <Button
+              variant="outline"
+              label="Template"
+              onPress={handleDownloadTemplate}
+            />
           </Box>
           <Box flex={1}>
-            <Button variant="outline" label="Upload CSV" onPress={() => {}} />
+            <Button
+              variant="outline"
+              label="Upload CSV"
+              loading={csvUploading}
+              disabled={csvUploading}
+              onPress={handleUploadCsv}
+            />
           </Box>
         </Box>
       </Box>
       <Typography variant="c1" color="neutral-500" textAlign="center">
-        CSV import coming soon — use manual entry for now
+        Upload a .csv file to import multiple products at once
       </Typography>
     </Box>
   )

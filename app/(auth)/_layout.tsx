@@ -16,10 +16,10 @@ const AuthLayout = () => {
       <Stack
         screenOptions={{
           headerShown: false,
-          animation: 'none'
+          animation: 'simple_push'
         }}>
         <Stack.Screen
-          name="products/edit/[productId]"
+          name="products/[productId]"
           options={{
             gestureEnabled: false
           }}
@@ -28,18 +28,6 @@ const AuthLayout = () => {
           name="create-product"
           options={{
             gestureEnabled: false
-          }}
-        />
-        <Stack.Screen
-          name="product-variants"
-          options={{
-            gestureEnabled: false
-          }}
-        />
-        <Stack.Screen
-          name="unlisted-products"
-          options={{
-            animation: 'slide_from_right'
           }}
         />
         <Stack.Screen

@@ -1,4 +1,4 @@
-import {Box, Typography} from '@/components/ui'
+import {Box} from '@/components/ui'
 import React from 'react'
 import SubscribedTab from './subscribed-tab'
 

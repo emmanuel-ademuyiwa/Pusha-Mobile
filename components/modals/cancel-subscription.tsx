@@ -1,7 +1,10 @@
 import {router} from 'expo-router'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+
 import {Box, Button, Typography} from '../ui'
 import CenterdModal from '../ui/centerd-modal'
+import {useCancelSubscription} from '@/queries/subscriptionQuery'
+import {errorHandler} from '@/utils/errorHandler'
 
 const CancelSubscription = ({
   show,
@@ -11,16 +14,36 @@ const CancelSubscription = ({
   onClose: () => void
 }) => {
   const [isCancelled, setIsCancelled] = useState(false)
+  const {mutateAsync: cancelSubscription, isPending} = useCancelSubscription()
+
+  useEffect(() => {
+    if (!show) setIsCancelled(false)
+  }, [show])
+
+  const handleConfirmCancel = async () => {
+    try {
+      await cancelSubscription()
+      setIsCancelled(true)
+    } catch (err) {
+      errorHandler(err)
+    }
+  }
+
+  const handleDone = () => {
+    onClose()
+    setIsCancelled(false)
+    router.replace('/(auth)/(more)/subscriptions')
+  }
 
   return (
-    <CenterdModal visible={show} onClose={onClose}>
+    <CenterdModal show={show} onClose={onClose}>
       {isCancelled ? (
         <Box alignItems="center" width={'100%'}>
           <Typography
             variant="h1-bold"
             color="secondary-500"
             fontSize={22}
-            maxWidth={136}
+            maxWidth={200}
             textAlign="center"
             lineHeight={33}>
             Subscription Cancelled
@@ -31,14 +54,16 @@ const CancelSubscription = ({
             color="neutral-800"
             maxWidth={279}
             variant="body">
-            You have sucessfullly cancelled your subscription with Pusha. Feel
+            You have successfully cancelled your subscription with Pusha. Feel
             free to renew later.
           </Typography>
 
           <Box mt={16} width={'100%'}>
             <Button
               label="Done"
-              onPress={() => router.replace('/(auth)/(more)/subscriptions')}
+              loading={false}
+              disabled={false}
+              onPress={handleDone}
             />
           </Box>
         </Box>
@@ -59,16 +84,23 @@ const CancelSubscription = ({
             Are you sure you want to cancel your subscription?
           </Typography>
 
-          <Box mt={16} width={'100%'} gap={16}>
-            <Button label="No" hasLinearGradient={false} onPress={onClose} />
+          <Box mt={16} width={'100%'} gap={12}>
+            <Button
+              label="No"
+              hasLinearGradient={false}
+              disabled={isPending}
+              onPress={onClose}
+            />
 
             <Button
               label="Yes, Cancel"
               hasLinearGradient={false}
-              textColor={'primary-400'}
-              borderColor="light-blue"
+              variant="primary"
               backgroundColor="light-blue"
-              onPress={() => setIsCancelled(true)}
+              color="primary-400"
+              loading={isPending}
+              disabled={isPending}
+              onPress={handleConfirmCancel}
             />
           </Box>
         </Box>

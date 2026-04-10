@@ -28,7 +28,7 @@ export const MORE_MENU_SECTIONS: MoreMenuSection[] = [
   {
     title: 'Business',
     items: [
-      {id: 'customers', title: 'Customers', icon: 'Users', route: '/(auth)/(tabs)/customers'},
+      {id: 'customers', title: 'Customers', icon: 'Users', route: '/(auth)/(more)/customers'},
       {id: 'products', title: 'Products', icon: 'Package', route: '/products'},
       {id: 'transactions', title: 'Transactions', icon: 'ArrowLeftRight', route: '/transactions'},
       {id: 'expenses', title: 'Expenses', icon: 'Receipt', route: '/expenses'},

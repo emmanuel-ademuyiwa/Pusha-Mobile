@@ -7,45 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		09463E5001814A1793A9990A /* dahlia-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE7C677D888F44B390BC5588 /* dahlia-bold.otf */; };
+		0917A3CCB7594CBE8897AFF2 /* InstrumentSan-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FB4178C658B94B3B854C6B1F /* InstrumentSan-Regular.ttf */; };
+		0E9EC4AEBA4F7FB9C1A8EC75 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 99E4590079ED8B36B7234182 /* PrivacyInfo.xcprivacy */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		1FC948873BB34CF29327E213 /* InstrumentSan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9BFA4B29F09F4D618F899980 /* InstrumentSan-Bold.ttf */; };
-		3AA59E6BDF4AAB9845812E59 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45B95AF517DF254E65F0D17 /* ExpoModulesProvider.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		47C9A5970B3B1865F16C2E65 /* libPods-Pusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46BC708EF85711CD8011DD5A /* libPods-Pusha.a */; };
-		80DCC4D094094B57B23239C7 /* dahlia-medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 13FEBD42A5A547B98036249E /* dahlia-medium.otf */; };
-		972BB7E6AFD54147BC6C45E7 /* InstrumentSan-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E44E6E2A00E40BD97A02247 /* InstrumentSan-SemiBold.ttf */; };
-		A37CD5BF2B3847EB8FCE31F7 /* InstrumentSan-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7D816E357814AB293754233 /* InstrumentSan-Medium.ttf */; };
+		4EA463B63D0E1B76180F2C24 /* libPods-Pusha.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 963A77F9919609802C9EC173 /* libPods-Pusha.a */; };
+		58A6E8FFCAF3613CA1CEDF21 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD67B9A03CFC9BB3637BE5E0 /* ExpoModulesProvider.swift */; };
+		77DF3146833B43EEAA6C2747 /* InstrumentSan-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B735E55EF734A7C94402A93 /* InstrumentSan-Bold.ttf */; };
+		86AC8C5F3C8E4F36B9FB069E /* dahlia-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC9A38D6CEA6430C91743F3C /* dahlia-bold.otf */; };
+		86BA7A7DB0FF4D0E91CA0EDC /* dahlia-medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 56FC14FAE91D463BA2C0C87F /* dahlia-medium.otf */; };
+		B1332B7CBCD84557873F3A2E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD6F21F2956C466D88A3EF8D /* icomoon.ttf */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		D685286ACD884F8D9A873C90 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07B766DD250849EB9A4EDC96 /* icomoon.ttf */; };
-		EBA31F1F8D32081D910B7321 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AB8ED498FEF8E55D4ABB1B43 /* PrivacyInfo.xcprivacy */; };
-		EBF91CFCD2AF4268BBCB1463 /* dahlia-regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B363144102B5407FAF3B41AE /* dahlia-regular.otf */; };
+		CF5E3AE8C2344A609819D1A0 /* InstrumentSan-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA644188F3DD4FF097463F6E /* InstrumentSan-Medium.ttf */; };
+		D417664BED604533B789C230 /* InstrumentSan-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 653AACB3F69E4BED9BB36D3E /* InstrumentSan-SemiBold.ttf */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		FE08AA09DFBF4AF183D9583C /* InstrumentSan-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 079437AA18184CE3AD09260F /* InstrumentSan-Regular.ttf */; };
+		FC80439999DB4AC4A23FA952 /* dahlia-regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A20F799EE3594B95917C169E /* dahlia-regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		079437AA18184CE3AD09260F /* InstrumentSan-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-Regular.ttf"; path = "../assets/fonts/InstrumentSan-Regular.ttf"; sourceTree = "<group>"; };
-		07B766DD250849EB9A4EDC96 /* icomoon.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = icomoon.ttf; path = ../assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Pusha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pusha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Pusha/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Pusha/Info.plist; sourceTree = "<group>"; };
-		13FEBD42A5A547B98036249E /* dahlia-medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "dahlia-medium.otf"; path = "../assets/fonts/dahlia-medium.otf"; sourceTree = "<group>"; };
-		46BC708EF85711CD8011DD5A /* libPods-Pusha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Pusha.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9BFA4B29F09F4D618F899980 /* InstrumentSan-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-Bold.ttf"; path = "../assets/fonts/InstrumentSan-Bold.ttf"; sourceTree = "<group>"; };
-		9E44E6E2A00E40BD97A02247 /* InstrumentSan-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-SemiBold.ttf"; path = "../assets/fonts/InstrumentSan-SemiBold.ttf"; sourceTree = "<group>"; };
+		56FC14FAE91D463BA2C0C87F /* dahlia-medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "dahlia-medium.otf"; path = "../assets/fonts/dahlia-medium.otf"; sourceTree = "<group>"; };
+		653AACB3F69E4BED9BB36D3E /* InstrumentSan-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-SemiBold.ttf"; path = "../assets/fonts/InstrumentSan-SemiBold.ttf"; sourceTree = "<group>"; };
+		7B735E55EF734A7C94402A93 /* InstrumentSan-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-Bold.ttf"; path = "../assets/fonts/InstrumentSan-Bold.ttf"; sourceTree = "<group>"; };
+		963A77F9919609802C9EC173 /* libPods-Pusha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Pusha.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		96F8C64212E17D7FEF55B010 /* Pods-Pusha.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pusha.release.xcconfig"; path = "Target Support Files/Pods-Pusha/Pods-Pusha.release.xcconfig"; sourceTree = "<group>"; };
+		99E4590079ED8B36B7234182 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Pusha/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A20F799EE3594B95917C169E /* dahlia-regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "dahlia-regular.otf"; path = "../assets/fonts/dahlia-regular.otf"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Pusha/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AB8ED498FEF8E55D4ABB1B43 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Pusha/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		ADFC5C685EED617A257DE9E3 /* Pods-Pusha.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pusha.release.xcconfig"; path = "Target Support Files/Pods-Pusha/Pods-Pusha.release.xcconfig"; sourceTree = "<group>"; };
-		B363144102B5407FAF3B41AE /* dahlia-regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "dahlia-regular.otf"; path = "../assets/fonts/dahlia-regular.otf"; sourceTree = "<group>"; };
+		AA644188F3DD4FF097463F6E /* InstrumentSan-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-Medium.ttf"; path = "../assets/fonts/InstrumentSan-Medium.ttf"; sourceTree = "<group>"; };
+		AD6F21F2956C466D88A3EF8D /* icomoon.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = icomoon.ttf; path = ../assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		BE7D2DCC093B74A37206531F /* Pods-Pusha.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pusha.debug.xcconfig"; path = "Target Support Files/Pods-Pusha/Pods-Pusha.debug.xcconfig"; sourceTree = "<group>"; };
-		E45B95AF517DF254E65F0D17 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Pusha/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		BC9A38D6CEA6430C91743F3C /* dahlia-bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "dahlia-bold.otf"; path = "../assets/fonts/dahlia-bold.otf"; sourceTree = "<group>"; };
+		CD67B9A03CFC9BB3637BE5E0 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Pusha/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EE7C677D888F44B390BC5588 /* dahlia-bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "dahlia-bold.otf"; path = "../assets/fonts/dahlia-bold.otf"; sourceTree = "<group>"; };
+		EF0242FCA5A6ADEFE6B6A96B /* Pods-Pusha.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pusha.debug.xcconfig"; path = "Target Support Files/Pods-Pusha/Pods-Pusha.debug.xcconfig"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Pusha/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* Pusha-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Pusha-Bridging-Header.h"; path = "Pusha/Pusha-Bridging-Header.h"; sourceTree = "<group>"; };
-		F7D816E357814AB293754233 /* InstrumentSan-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-Medium.ttf"; path = "../assets/fonts/InstrumentSan-Medium.ttf"; sourceTree = "<group>"; };
+		FB4178C658B94B3B854C6B1F /* InstrumentSan-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InstrumentSan-Regular.ttf"; path = "../assets/fonts/InstrumentSan-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				47C9A5970B3B1865F16C2E65 /* libPods-Pusha.a in Frameworks */,
+				4EA463B63D0E1B76180F2C24 /* libPods-Pusha.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,34 +69,34 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				AB8ED498FEF8E55D4ABB1B43 /* PrivacyInfo.xcprivacy */,
+				99E4590079ED8B36B7234182 /* PrivacyInfo.xcprivacy */,
 			);
 			name = Pusha;
 			sourceTree = "<group>";
 		};
-		2ACC31DC6AA099B0A57F5934 /* Pusha */ = {
+		196C424C2B7B49BFA7EE4BE4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E45B95AF517DF254E65F0D17 /* ExpoModulesProvider.swift */,
+				AA644188F3DD4FF097463F6E /* InstrumentSan-Medium.ttf */,
+				FB4178C658B94B3B854C6B1F /* InstrumentSan-Regular.ttf */,
+				653AACB3F69E4BED9BB36D3E /* InstrumentSan-SemiBold.ttf */,
+				7B735E55EF734A7C94402A93 /* InstrumentSan-Bold.ttf */,
+				A20F799EE3594B95917C169E /* dahlia-regular.otf */,
+				56FC14FAE91D463BA2C0C87F /* dahlia-medium.otf */,
+				BC9A38D6CEA6430C91743F3C /* dahlia-bold.otf */,
+				AD6F21F2956C466D88A3EF8D /* icomoon.ttf */,
 			);
-			name = Pusha;
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				46BC708EF85711CD8011DD5A /* libPods-Pusha.a */,
+				963A77F9919609802C9EC173 /* libPods-Pusha.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		2F4078A7CD38DB79A47F0E23 /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				2ACC31DC6AA099B0A57F5934 /* Pusha */,
-			);
-			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -113,9 +113,9 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				CF2E1416CE1848C29E4D23A5 /* Resources */,
-				EF60E5E3AD2E5EDD9D5B83BD /* Pods */,
-				2F4078A7CD38DB79A47F0E23 /* ExpoModulesProviders */,
+				196C424C2B7B49BFA7EE4BE4 /* Resources */,
+				8BE7DDBD9214C19DE35F7BF6 /* Pods */,
+				889D67AE4DCE4A495E96411A /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -130,6 +130,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		889D67AE4DCE4A495E96411A /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				D8C82ED5F2873CAF5FAC847F /* Pusha */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		8BE7DDBD9214C19DE35F7BF6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EF0242FCA5A6ADEFE6B6A96B /* Pods-Pusha.debug.xcconfig */,
+				96F8C64212E17D7FEF55B010 /* Pods-Pusha.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,30 +157,12 @@
 			path = Pusha/Supporting;
 			sourceTree = "<group>";
 		};
-		CF2E1416CE1848C29E4D23A5 /* Resources */ = {
+		D8C82ED5F2873CAF5FAC847F /* Pusha */ = {
 			isa = PBXGroup;
 			children = (
-				F7D816E357814AB293754233 /* InstrumentSan-Medium.ttf */,
-				079437AA18184CE3AD09260F /* InstrumentSan-Regular.ttf */,
-				9E44E6E2A00E40BD97A02247 /* InstrumentSan-SemiBold.ttf */,
-				9BFA4B29F09F4D618F899980 /* InstrumentSan-Bold.ttf */,
-				B363144102B5407FAF3B41AE /* dahlia-regular.otf */,
-				13FEBD42A5A547B98036249E /* dahlia-medium.otf */,
-				EE7C677D888F44B390BC5588 /* dahlia-bold.otf */,
-				07B766DD250849EB9A4EDC96 /* icomoon.ttf */,
+				CD67B9A03CFC9BB3637BE5E0 /* ExpoModulesProvider.swift */,
 			);
-			name = Resources;
-			path = "";
-			sourceTree = "<group>";
-		};
-		EF60E5E3AD2E5EDD9D5B83BD /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				BE7D2DCC093B74A37206531F /* Pods-Pusha.debug.xcconfig */,
-				ADFC5C685EED617A257DE9E3 /* Pods-Pusha.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
+			name = Pusha;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,13 +173,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Pusha" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				64E8618953362A60E45944F2 /* [Expo] Configure project */,
+				7D824F26D9BF40095F72F7DF /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				4BBAC9C98C5E32F423333804 /* [CP] Embed Pods Frameworks */,
+				26B14F103D3FB46AA8A077ED /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,15 +229,15 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				A37CD5BF2B3847EB8FCE31F7 /* InstrumentSan-Medium.ttf in Resources */,
-				FE08AA09DFBF4AF183D9583C /* InstrumentSan-Regular.ttf in Resources */,
-				972BB7E6AFD54147BC6C45E7 /* InstrumentSan-SemiBold.ttf in Resources */,
-				1FC948873BB34CF29327E213 /* InstrumentSan-Bold.ttf in Resources */,
-				EBF91CFCD2AF4268BBCB1463 /* dahlia-regular.otf in Resources */,
-				80DCC4D094094B57B23239C7 /* dahlia-medium.otf in Resources */,
-				09463E5001814A1793A9990A /* dahlia-bold.otf in Resources */,
-				D685286ACD884F8D9A873C90 /* icomoon.ttf in Resources */,
-				EBA31F1F8D32081D910B7321 /* PrivacyInfo.xcprivacy in Resources */,
+				CF5E3AE8C2344A609819D1A0 /* InstrumentSan-Medium.ttf in Resources */,
+				0917A3CCB7594CBE8897AFF2 /* InstrumentSan-Regular.ttf in Resources */,
+				D417664BED604533B789C230 /* InstrumentSan-SemiBold.ttf in Resources */,
+				77DF3146833B43EEAA6C2747 /* InstrumentSan-Bold.ttf in Resources */,
+				FC80439999DB4AC4A23FA952 /* dahlia-regular.otf in Resources */,
+				86BA7A7DB0FF4D0E91CA0EDC /* dahlia-medium.otf in Resources */,
+				86AC8C5F3C8E4F36B9FB069E /* dahlia-bold.otf in Resources */,
+				B1332B7CBCD84557873F3A2E /* icomoon.ttf in Resources */,
+				0E9EC4AEBA4F7FB9C1A8EC75 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +281,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4BBAC9C98C5E32F423333804 /* [CP] Embed Pods Frameworks */ = {
+		26B14F103D3FB46AA8A077ED /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -299,7 +299,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pusha/Pods-Pusha-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		64E8618953362A60E45944F2 /* [Expo] Configure project */ = {
+		7D824F26D9BF40095F72F7DF /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -396,7 +396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				3AA59E6BDF4AAB9845812E59 /* ExpoModulesProvider.swift in Sources */,
+				58A6E8FFCAF3613CA1CEDF21 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +405,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE7D2DCC093B74A37206531F /* Pods-Pusha.debug.xcconfig */;
+			baseConfigurationReference = EF0242FCA5A6ADEFE6B6A96B /* Pods-Pusha.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -441,7 +441,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ADFC5C685EED617A257DE9E3 /* Pods-Pusha.release.xcconfig */;
+			baseConfigurationReference = 96F8C64212E17D7FEF55B010 /* Pods-Pusha.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

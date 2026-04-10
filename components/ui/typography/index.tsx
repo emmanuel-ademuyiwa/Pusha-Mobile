@@ -25,15 +25,14 @@ export interface TypographyProps
     > {}
 
 export function Typography(props: PropsWithChildren<TypographyProps>) {
-  const {...textProps} = props
+  const {children, ...rest} = props
 
   return (
     <TextContainer
+      {...rest}
       allowFontScaling={false}
-      adjustsFontSizeToFit={false}
-      {...textProps}
-      style={{}}>
-      {props.children}
+      adjustsFontSizeToFit={false}>
+      {children}
     </TextContainer>
   )
 }

@@ -49,23 +49,38 @@ interface Props {
 }
 
 export const AppPressable: FC<PropsWithChildren<Props>> = (props) => {
+  const {
+    children,
+    onPress,
+    onPressIn,
+    onPressOut,
+    onLongPress,
+    disabled,
+    style,
+    ...layoutStyle
+  } = props
+
   return (
     <Pressable
+      disabled={disabled}
       role="button"
       accessibilityRole="button"
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      onLongPress={onLongPress}
       onPress={() => {
-        Haptics.impactAsync();
-        props.onPress && props.onPress();
+        Haptics.impactAsync()
+        onPress?.()
       }}
-      style={({ pressed }) => [
-        { ...props },
-        pressed ? { opacity: 0.75 } : { opacity: 1 },
-        props.disabled ? { opacity: 0.75 } : null,
-      ]}
-    >
-      {props.children}
+      style={({pressed}) => [
+        layoutStyle,
+        style,
+        pressed ? {opacity: 0.75} : {opacity: 1},
+        disabled ? {opacity: 0.75} : null,
+      ]}>
+      {children}
     </Pressable>
-  );
-};
+  )
+}
 
 export default AppPressable;

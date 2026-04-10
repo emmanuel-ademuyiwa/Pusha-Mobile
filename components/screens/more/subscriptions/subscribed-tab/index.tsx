@@ -7,21 +7,22 @@ import {errorHandler} from '@/utils/errorHandler'
 import toast from '@/utils/toast'
 import React, {useMemo, useState} from 'react'
 import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native'
-import BillingCycle from './billing-cycle'
-import SubscriptionPlans from './subscription-plans'
+import PaymentMethodsSection from '../payment-methods'
+import SubscribedBillingTab, {
+  type SubscriptionRecord
+} from '../subscribed-billing-tab'
+import SubscriptionPlans from '../subscription-plans'
 
 type BillingCycle = 'MONTHLY' | 'YEARLY'
 
+type MainTab = 'plans' | 'billing'
+
 interface SubscribedTabProps {
-  subscription?: {
-    plan_id?: string
-    next_billing_date?: string
-    amount?: number | string
-    [key: string]: unknown
-  }
+  subscription?: SubscriptionRecord
 }
 
 const SubscribedTab = ({subscription}: SubscribedTabProps) => {
+  const [mainTab, setMainTab] = useState<MainTab>('plans')
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('MONTHLY')
   const [changingPlanId, setChangingPlanId] = useState<string | null>(null)
 
@@ -32,6 +33,10 @@ const SubscribedTab = ({subscription}: SubscribedTabProps) => {
     refetch
   } = useGetSubscriptionPlans()
   const {mutateAsync: changePlan} = useChangePlan()
+
+  const currentPlanId =
+    subscription?.plan_id ??
+    (subscription?.plan as {id?: string} | undefined)?.id
 
   const plans = useMemo(() => {
     const list = (plansRaw ?? []) as Array<{
@@ -101,66 +106,122 @@ const SubscribedTab = ({subscription}: SubscribedTabProps) => {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Box flex={1} gap={16} p={16}>
-        <BillingCycle subscription={subscription} />
-
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      nestedScrollEnabled>
+      <Box flex={1} p={16} paddingBottom={32}>
         <Box
           flexDirection="row"
-          alignSelf="center"
-          backgroundColor="white"
+          backgroundColor="neutral-100"
           borderRadius={12}
-          borderWidth={1}
-          style={{borderColor: '#EDF2F8'}}
           padding={4}
-          marginBottom={4}>
+          marginBottom={20}>
           <TouchableOpacity
-            activeOpacity={0.85}
-            onPress={() => setBillingCycle('MONTHLY')}
-            style={[
-              styles.cycleBtn,
-              billingCycle === 'MONTHLY' && styles.cycleBtnActive
-            ]}>
+            activeOpacity={0.88}
+            onPress={() => setMainTab('plans')}
+            style={[styles.segmentItem, mainTab === 'plans' && styles.segmentActive]}>
             <Typography
               variant="c1-medium"
-              style={{
-                color: billingCycle === 'MONTHLY' ? '#FFFFFF' : '#64748B'
-              }}>
-              Monthly
+              color={mainTab === 'plans' ? 'secondary-500' : 'neutral-600'}>
+              Subscription plans
             </Typography>
           </TouchableOpacity>
           <TouchableOpacity
-            activeOpacity={0.85}
-            onPress={() => setBillingCycle('YEARLY')}
+            activeOpacity={0.88}
+            onPress={() => setMainTab('billing')}
             style={[
-              styles.cycleBtn,
-              billingCycle === 'YEARLY' && styles.cycleBtnActive
+              styles.segmentItem,
+              mainTab === 'billing' && styles.segmentActive
             ]}>
             <Typography
               variant="c1-medium"
-              style={{
-                color: billingCycle === 'YEARLY' ? '#FFFFFF' : '#64748B'
-              }}>
-              Yearly
+              color={mainTab === 'billing' ? 'secondary-500' : 'neutral-600'}>
+              Billing Cycle
             </Typography>
           </TouchableOpacity>
         </Box>
 
-        <SubscriptionPlans
-          plans={plans}
-          currentPlanId={subscription?.plan_id}
-          onSelect={handleChangePlan}
-          subscribingPlanId={changingPlanId}
-        />
+        {mainTab === 'billing' && subscription ? (
+          <SubscribedBillingTab subscription={subscription} />
+        ) : null}
+
+        {mainTab === 'plans' ? (
+          <>
+            <Typography variant="h3-bold" color="secondary-500" mb={14}>
+              Subscription plan
+            </Typography>
+
+            <Box
+              flexDirection="row"
+              alignSelf="stretch"
+              backgroundColor="neutral-100"
+              borderRadius={12}
+              padding={4}
+              marginBottom={16}>
+              <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={() => setBillingCycle('MONTHLY')}
+                style={[
+                  styles.cycleBtn,
+                  billingCycle === 'MONTHLY' && styles.cycleBtnActive
+                ]}>
+                <Typography
+                  variant="c1-medium"
+                  color={billingCycle === 'MONTHLY' ? 'white' : 'secondary-500'}
+                  opacity={billingCycle === 'MONTHLY' ? 1 : 0.85}>
+                  Monthly
+                </Typography>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={() => setBillingCycle('YEARLY')}
+                style={[
+                  styles.cycleBtn,
+                  billingCycle === 'YEARLY' && styles.cycleBtnActive
+                ]}>
+                <Typography
+                  variant="c1-medium"
+                  color={billingCycle === 'YEARLY' ? 'white' : 'secondary-500'}
+                  opacity={billingCycle === 'YEARLY' ? 1 : 0.85}>
+                  Yearly
+                </Typography>
+              </TouchableOpacity>
+            </Box>
+
+            <SubscriptionPlans
+              plans={plans}
+              currentPlanId={currentPlanId}
+              onSelect={handleChangePlan}
+              subscribingPlanId={changingPlanId}
+            />
+
+          </>
+        ) : null}
       </Box>
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  cycleBtn: {
-    paddingHorizontal: 16,
+  segmentItem: {
+    flex: 1,
     paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10
+  },
+  segmentActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 1
+  },
+  cycleBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
     borderRadius: 8
   },
   cycleBtnActive: {

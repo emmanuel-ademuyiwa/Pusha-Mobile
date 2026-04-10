@@ -60,5 +60,14 @@ target 'Pusha' do
         end
       end
     end
+
+    # Xcode 26.4 + fmt 11: Apple Clang rejects FMT_STRING consteval checks under C++20.
+    # fmt.podspec uses RN's c++20; compiling fmt as C++17 avoids those errors (see fmt#4264, RN#55601).
+    installer.pods_project.targets.each do |target|
+      next unless target.name == 'fmt'
+      target.build_configurations.each do |cfg|
+        cfg.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+      end
+    end
   end
 end

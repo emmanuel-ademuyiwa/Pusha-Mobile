@@ -9,9 +9,16 @@ const Page = () => {
   const {data: subscription, isLoading} = useGetCurrentSubscription()
 
   return (
-    <ScreenView navTitle="Subscriptions" alignNav="center" hasTopBanner={false}>
+    <ScreenView
+      navTitle="Subscriptions"
+      alignNav="center"
+      hasTopBanner={false}
+      color={isLoading || subscription ? 'white' : 'primary-100'}
+      navTone={isLoading || subscription ? 'default' : 'inverse'}>
       {isLoading ? (
-        <Box flex={1} alignItems="center" justifyContent="center"><PushaActivityIndicator /></Box>
+        <Box flex={1} alignItems="center" justifyContent="center">
+          <PushaActivityIndicator />
+        </Box>
       ) : subscription ? (
         <Subscribed subscription={subscription} />
       ) : (

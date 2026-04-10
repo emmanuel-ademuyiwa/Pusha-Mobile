@@ -24,11 +24,9 @@ export function PeriodTabsRow<T extends string>({
   trailing
 }: PeriodTabsRowProps<T>) {
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      style={styles.scroll}>
-      <Box flexDirection="row" alignItems="center" gap={8} pb={4} pt={8}>
+    
+      <Box flexDirection='row' alignItems='center' justifyContent='space-between' mb={8}>
+        <Box flexDirection="row" alignItems="center" gap={8} pb={4} pt={8}>
         {tabs.map(({key, label}) => (
           <AppPressable key={key} onPress={() => onSelect(key)}>
             <Box
@@ -46,9 +44,9 @@ export function PeriodTabsRow<T extends string>({
             </Box>
           </AppPressable>
         ))}
+      </Box>
         {trailing}
       </Box>
-    </ScrollView>
   )
 }
 

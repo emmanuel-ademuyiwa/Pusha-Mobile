@@ -10,6 +10,7 @@ import {
   PeriodFilter,
   PeriodTabsRow,
   PushaActivityIndicator,
+  TextAction,
   Typography
 } from '@/components/ui'
 import {PlatformSalesChart, BarItem} from '@/components/ui/platform-sales-chart'
@@ -472,15 +473,16 @@ const Dashboard = () => {
             selectedKey={mainPeriod}
             onSelect={k => setMainPeriod(k as MainPeriod)}
             trailing={
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => setMainPeriod('all')}>
-                <Box paddingHorizontal={8} paddingVertical={8}>
-                  <Typography variant="c1-medium" color="primary-100">
-                    See all
-                  </Typography>
-                </Box>
-              </TouchableOpacity>
+              // <TouchableOpacity
+              //   activeOpacity={0.8}
+              //   onPress={() => setMainPeriod('all')}>
+              //   <Box paddingHorizontal={8} paddingVertical={8}>
+              //     <Typography variant="c1-medium" color="primary-100">
+              //       See all
+              //     </Typography>
+              //   </Box>
+              // </TouchableOpacity>
+              <TextAction onPress={() => router.navigate('/(auth)/(more)/business-intelligence')}>See all</TextAction>
             }
           />
         </Container>
@@ -985,7 +987,7 @@ const Dashboard = () => {
 
       {/* ── FAB ── */}
       <FloatingButton
-        onPress={() => router.push('/(auth)/(tabs)/sales' as any)}>
+        onPress={() => router.push('/(auth)/(tabs)/products' as any)}>
         <AppIcon name="Plus" size={24} color="#fff" />
       </FloatingButton>
     </ScreenView>

@@ -1,5 +1,12 @@
 import {api} from '@/api'
-import {AppIcon, Box, Button, Container, TextField, Typography} from '@/components/ui'
+import {
+  AppIcon,
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography
+} from '@/components/ui'
 import {KeyboardAwareScrollView} from '@/components/util/keyboard-aware-scroll-view'
 import {useGetBusiness, useUpdateAssistant} from '@/queries/merchantQuery'
 import {errorHandler} from '@/utils/errorHandler'
@@ -71,45 +78,54 @@ const Step4Preview = ({handleNext, handleBack}: Step4PreviewProps) => {
 
     const user = getFromVault('user') as Record<string, unknown> | undefined
     const userName =
-      [user?.first_name, user?.last_name].filter(Boolean).join(' ') ||
-      'Visitor'
+      [user?.first_name, user?.last_name].filter(Boolean).join(' ') || 'Visitor'
     const userEmail =
       typeof user?.email === 'string' ? user.email : `visitor@pusha.ai`
     const userPhone =
-      typeof user?.phone_number === 'string'
-        ? user.phone_number
-        : '00000000000'
+      typeof user?.phone_number === 'string' ? user.phone_number : '00000000000'
 
-    const fallbackSession = `${Date.now()}-${Math.random().toString(16).slice(2)}`
+    // Generate client-side session id FIRST (mirrors the webchat widget pattern)
+    const clientSessionId = `${Date.now()}-${Math.random().toString(16).slice(2)}`
 
     setChatSocketStatus('connecting')
+    console.log('[Step4] connecting socket with client session_id:', clientSessionId, ' business_id:', businessId)
 
-    api.webchat
-      .startChat({
-        business_id: businessId,
-        name: userName,
-        email: userEmail,
-        phone_number: userPhone
-      })
-      .then((axiosRes: {data?: {data?: unknown; session_id?: string}}) => {
-        if (ignored) return
-        const body = axiosRes?.data
-        const inner = body?.data ?? body
-        const sid =
-          (inner as {session_id?: string})?.session_id ??
-          (inner as {sessionId?: string})?.sessionId ??
-          fallbackSession
-        sessionIdRef.current = sid
+    // Connect socket immediately with the client-generated session_id — don't wait for startChat
+    const socket = connectWebchatClientSocket({
+      business_id: businessId,
+      session_id: clientSessionId
+    })
+    chatSocketRef.current = socket
+    sessionIdRef.current = clientSessionId
 
-        const socket = connectWebchatClientSocket({
+    socket.on('connect', () => {
+      if (ignored) return
+      console.log('[Step4] socket CONNECTED ✓  socket.id:', socket.id, ' session_id:', clientSessionId)
+      setChatSocketStatus('connected')
+
+      // Call startChat AFTER socket is connected (registers user info with server)
+      console.log('[Step4] calling startChat to register session…')
+      api.webchat
+        .startChat({
           business_id: businessId,
-          session_id: sid
+          name: userName,
+          email: userEmail,
+          phone_number: userPhone
         })
-        chatSocketRef.current = socket
-
-        socket.on('connect', () => {
+        .then((axiosRes: unknown) => {
           if (ignored) return
-          setChatSocketStatus('connected')
+          console.log('[Step4] startChat response (raw):', JSON.stringify(axiosRes))
+          // Use server's session_id if returned, otherwise keep client-generated one
+          const body = (axiosRes as any)?.data
+          const inner = body?.data ?? body
+          const serverSid: string | undefined =
+            inner?.session_id ?? inner?.sessionId ?? undefined
+          const sid = serverSid ?? clientSessionId
+          if (serverSid && serverSid !== clientSessionId) {
+            console.log('[Step4] server returned different session_id:', serverSid, '— using it for emit')
+            sessionIdRef.current = serverSid
+          }
+
           const opening = 'Hi! What do you sell?'
           const now = new Date().toISOString()
           setChatMessages([
@@ -120,43 +136,62 @@ const Step4Preview = ({handleNext, handleBack}: Step4PreviewProps) => {
               time: formatTime(now)
             }
           ])
+          const emitPayload = {session_id: sid, business_id: businessId, message: opening}
+          console.log('[Step4] emitting clientwebchat-message →', JSON.stringify(emitPayload))
+          socket.emit('clientwebchat-message', emitPayload)
+        })
+        .catch((err: unknown) => {
+          if (ignored) return
+          console.error('[Step4] startChat failed:', err)
+          // Still try sending with client session_id even if startChat fails
+          const opening = 'Hi! What do you sell?'
+          const now = new Date().toISOString()
+          setChatMessages([
+            {id: `user-${now}`, sender: 'user', message: opening, time: formatTime(now)}
+          ])
           socket.emit('clientwebchat-message', {
-            session_id: sid,
+            session_id: clientSessionId,
             business_id: businessId,
             message: opening
           })
         })
+    })
 
-        socket.on('chat-response', (data: Record<string, unknown>) => {
-          if (ignored) return
-          const content = (
-            data?.text ??
-            data?.message ??
-            data?.content ??
-            ''
-          ).toString()
-          if (!content) return
-          const ts = (data?.created_at as string) || new Date().toISOString()
-          setChatMessages(prev => [
-            ...prev,
-            {
-              id: `bot-${ts}-${Math.random().toString(16).slice(2)}`,
-              sender: 'bot',
-              message: content,
-              time: formatTime(ts)
-            }
-          ])
-        })
+    // Catch-all — fires for EVERY event the socket receives (dev aid)
+    socket.onAny((event: string, ...args: unknown[]) => {
+      console.log('[Step4] ← socket event received:', event, JSON.stringify(args))
+    })
 
-        socket.on('disconnect', () => {
-          if (!ignored) setChatSocketStatus('idle')
-        })
-      })
-      .catch(() => {
-        if (ignored) return
-        chatStartedRef.current = false
-        setChatSocketStatus('idle')
-      })
+    socket.on('chat-response', (data: Record<string, unknown>) => {
+      if (ignored) return
+      const content = (
+        data?.text ??
+        data?.message ??
+        data?.content ??
+        ''
+      ).toString()
+      if (!content) return
+      const ts = (data?.created_at as string) || new Date().toISOString()
+      setChatMessages(prev => [
+        ...prev,
+        {
+          id: `bot-${ts}-${Math.random().toString(16).slice(2)}`,
+          sender: 'bot',
+          message: content,
+          time: formatTime(ts)
+        }
+      ])
+    })
+
+    socket.on('connect_error', (err: Error) => {
+      console.error('[Step4] socket connect_error:', err.message, (err as any).data)
+      if (!ignored) setChatSocketStatus('idle')
+    })
+
+    socket.on('disconnect', (reason: string) => {
+      console.warn('[Step4] socket DISCONNECTED, reason:', reason)
+      if (!ignored) setChatSocketStatus('idle')
+    })
 
     return () => {
       ignored = true
@@ -171,8 +206,6 @@ const Step4Preview = ({handleNext, handleBack}: Step4PreviewProps) => {
     if (!chatSocketRef.current || chatSocketStatus !== 'connected') return
     const message = chatInput.trim()
     if (!message || !businessId) return
-    const sid = sessionIdRef.current
-    if (!sid) return
 
     const now = new Date().toISOString()
     setChatMessages(prev => [
@@ -185,6 +218,8 @@ const Step4Preview = ({handleNext, handleBack}: Step4PreviewProps) => {
       }
     ])
     setChatInput('')
+    // Read session_id from socket query opts (matches web app approach)
+    const sid = (chatSocketRef.current as any)?.io?.opts?.query?.session_id ?? sessionIdRef.current
     chatSocketRef.current.emit('clientwebchat-message', {
       session_id: sid,
       business_id: businessId,
@@ -338,6 +373,9 @@ const Step4Preview = ({handleNext, handleBack}: Step4PreviewProps) => {
                             : styles.bubbleBot
                         ]}>
                         <Typography
+                          color={
+                            msg.sender === 'user' ? 'white' : 'neutral-900'
+                          }
                           variant="body"
                           style={
                             msg.sender === 'user'
@@ -347,7 +385,10 @@ const Step4Preview = ({handleNext, handleBack}: Step4PreviewProps) => {
                           {msg.message}
                         </Typography>
                       </View>
-                      <Typography variant="c1" color="neutral-600" marginTop={4}>
+                      <Typography
+                        variant="c1"
+                        color="neutral-600"
+                        marginTop={4}>
                         {msg.time}
                       </Typography>
                     </View>

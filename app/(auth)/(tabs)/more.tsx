@@ -103,7 +103,7 @@ const More = () => {
                   id: 'customers',
                   title: 'Customers',
                   icon: 'Users',
-                  onPress: () => router.push('/(auth)/customers' as any)
+                  onPress: goTo('/customers')
                 },
                 {
                   id: 'referrals',
