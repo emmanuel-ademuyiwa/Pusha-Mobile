@@ -62,7 +62,7 @@ export const TextAction = (props: PropsWithChildren<TextActionProps>) => {
           color={color}
           {...TextActionProps}
           onPress={() => {
-            Haptics.impactAsync()
+            // Haptics.impactAsync()
             handleOnPress()
           }}>
           {props.children}

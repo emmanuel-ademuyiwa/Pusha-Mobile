@@ -69,7 +69,7 @@ export const AppPressable: FC<PropsWithChildren<Props>> = (props) => {
       onPressOut={onPressOut}
       onLongPress={onLongPress}
       onPress={() => {
-        Haptics.impactAsync()
+        // Haptics.impactAsync()
         onPress?.()
       }}
       style={({pressed}) => [

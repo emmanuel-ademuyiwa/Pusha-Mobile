@@ -52,9 +52,9 @@ export const TabBarButton = ({
   return (
     <AnimatedPressable
       onPress={e => {
-        if (Platform.OS !== 'web') {
-          Haptics.selectionAsync()
-        }
+        // if (Platform.OS !== 'web') {
+        //   Haptics.selectionAsync()
+        // }
         onPress?.(e)
       }}
       onPressIn={() => {

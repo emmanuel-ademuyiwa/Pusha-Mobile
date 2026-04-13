@@ -174,7 +174,7 @@ export const Button = ({
 
   const handlePress = () => {
     if (!isInActive && onPress) {
-      Haptics.impactAsync()
+      // Haptics.impactAsync()
       onPress()
     }
   }
