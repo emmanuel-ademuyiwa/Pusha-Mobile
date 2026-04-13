@@ -1,13 +1,20 @@
 import {Stack} from 'expo-router'
 import {StatusBar} from 'expo-status-bar'
-import React from 'react'
+import React, {useEffect} from 'react'
 
 import OTAUpdatesScreen from '@/components/screens/ota-updates'
 import {Box} from '@/components/ui'
-import {useIsUpdateScreenShown} from '@/store/updatesStore'
+import {useIsUpdateScreenShown, useUpdatesActions} from '@/store/updatesStore'
 
 const AuthLayout = () => {
   const isUpdatesScreenShown = useIsUpdateScreenShown()
+  const updatesActions = useUpdatesActions()
+
+  useEffect(() => {
+    if (!__DEV__) {
+      updatesActions.autoCheckOTA()
+    }
+  }, [])
 
   return (
     <Box flex={1} position="relative">

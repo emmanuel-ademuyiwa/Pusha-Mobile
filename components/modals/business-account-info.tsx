@@ -26,7 +26,6 @@ export const BusinessAccountInfoModal = forwardRef<Modal>((props, ref) => {
         </Box>
         <Button
           marginTop={12}
-          variant="secondary"
           label="Got it!"
           onPress={() => innerRef.current?.dismiss()}
         />

@@ -244,7 +244,7 @@ const Sales = () => {
   )
 
   return (
-    <ScreenView navTitle="Sales" alignNav="center" backButton={false} hasTopBanner={false} footerPadding={false}> 
+    <ScreenView navTitle="Sales" backButton={false} hasTopBanner={false} footerPadding={false}> 
       <StatusBar style="dark" animated />
 
       {isLoading ? (

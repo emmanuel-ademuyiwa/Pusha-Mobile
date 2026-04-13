@@ -87,7 +87,7 @@ const OTAUpdatesScreen = () => {
                     There&apos;s a new update! 🎉
                   </Typography>
                   <Typography mt={8} color="white" textAlign="center">
-                    A newer version of Baze is available. Click the button to
+                    A newer version of Pusha is available. Click the button to
                     download the new version for the best app experience.
                   </Typography>
                 </>
@@ -108,7 +108,6 @@ const OTAUpdatesScreen = () => {
             <>
               {updatesExists === false && (
                 <Button
-                  variant="secondary"
                   label="Dismiss"
                   align="stretch"
                   onPress={() => updatesActions.setIsUpdateScreenShown(false)}
@@ -118,8 +117,7 @@ const OTAUpdatesScreen = () => {
             <>
               {updatesExists && (
                 <Button
-                  variant="secondary"
-                  label="Update my App"
+                  label="Update Pusha"
                   align="stretch"
                   onPress={() => updatesActions.fetchOTAUpdate()}
                 />

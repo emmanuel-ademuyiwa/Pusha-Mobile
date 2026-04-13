@@ -1,4 +1,4 @@
-package com.pusha.app
+package com.pushahq.app
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

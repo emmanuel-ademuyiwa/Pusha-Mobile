@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pusha",
     "slug": "pusha",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "scheme": "pusha",
@@ -80,6 +80,13 @@
       "expo-build-properties",
       "expo-web-browser"
     ],
+    "updates": {
+      "url": "https://u.expo.dev/4a07fb65-9729-4b75-b1cf-12f622d1c3b2",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": "0.0.1",
     "experiments": {
       "typedRoutes": true
     },
@@ -92,9 +99,9 @@
       "DASHBOARD_CHAT_SOCKET_URL": "wss://api-beta.pushahq.com/webchat",
       "router": {},
       "eas": {
-        "projectId": "b12e24da-db0f-42c4-b443-ce833c629d30"
+        "projectId": "4a07fb65-9729-4b75-b1cf-12f622d1c3b2"
       }
     },
-    "owner": "emmanuel-ademuyiwa"
+    "owner": "pushahq"
   }
 }

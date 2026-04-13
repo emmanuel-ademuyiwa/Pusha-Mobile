@@ -110,7 +110,7 @@ function App() {
           maxAge: Infinity
         }}>
         <GestureHandlerRootView style={{flex: 1}}>
-          <ToastProvider placement="top" duration={3000}>
+          <ToastProvider offsetTop={40} placement="top" duration={3000}>
             <ThemeProvider theme={theme}>
               <KeyboardProvider>
                 <ModalProvider>

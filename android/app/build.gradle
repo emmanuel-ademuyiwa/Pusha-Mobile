@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.pusha.app'
+    namespace 'com.pushahq.app'
     defaultConfig {
-        applicationId 'com.pusha.app'
+        applicationId 'com.pushahq.app'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

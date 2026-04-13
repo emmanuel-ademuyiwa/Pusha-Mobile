@@ -8,7 +8,7 @@ import {TabBarButton} from '@/components/ui/tab-bar-button'
 
 const TABS = [
   {name: 'dashboard', icon: 'Home', selectedIcon: 'Home', text: 'Home'},
-  {name: 'sales', icon: 'Chart', selectedIcon: 'Chart', text: 'Sales'},
+  {name: 'sales', icon: 'Chart', selectedIcon: 'Chart1', text: 'Sales'},
   {
     name: 'products',
     icon: 'Notepad2',
@@ -17,8 +17,8 @@ const TABS = [
   },
   {
     name: 'chats',
-    icon: 'MessageCircle',
-    selectedIcon: 'MessageCircle',
+    icon: 'Messages',
+    selectedIcon: 'Messages1',
     text: 'Chats'
   },
   {
@@ -36,7 +36,16 @@ const TabBar = ({state, navigation}: BottomTabBarProps) => {
   const insets = useSafeAreaInsets()
 
   return (
-    <View style={[styles.tabBar, {paddingBottom: Math.max(insets.bottom, 16)}]}>
+    <View
+      style={[
+        styles.tabBar,
+        {
+          paddingBottom:
+            Platform.OS === 'android'
+              ? Math.max(insets.bottom, 24)
+              : Math.max(insets.bottom, 16)
+        }
+      ]}>
       {state.routes.map((route, index) => {
         const tab = TABS.find(t => t.name === route.name)
         if (!tab) return null
