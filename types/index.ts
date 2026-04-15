@@ -115,7 +115,7 @@ export interface ICreateProductPayload {
   description: string
   category_id?: string
   category?: string
-  /** Optional; merged into description when calling POST /products/upload/text */
+  /** Optional; merged into description when calling POST /products */
   brand?: string
   tags: string[]
   unit_price: number

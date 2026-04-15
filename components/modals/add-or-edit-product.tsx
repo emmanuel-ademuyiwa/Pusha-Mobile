@@ -8,15 +8,12 @@ import {
   AppModal,
   Box,
   Button,
-  SearchableInput,
-  TextArea,
   TextField,
   Typography
 } from '@/components/ui'
 import {QUERY_KEYS} from '@/constants/queryKeys'
 import {useForwardedRef} from '@/hooks/useForwardedRef'
 import {useMediaPersmissions} from '@/hooks/useMediaPersmissions'
-import {useListCategories} from '@/queries/productsQuery'
 import {userQuery} from '@/queries/userQueries'
 import {
   useProductsActions,
@@ -43,13 +40,9 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
     const {requestPermission} = useMediaPersmissions()
     const productsActions = useProductsActions()
     const loadingState = useProductsLoadingState()
-    const [loading, setLoading] = useState(false)
-    const {data, isLoading: categoriesLoading} = useListCategories()
-    const categoriesData = data?.records
     const isEditMode = props.mode === 'edit' && props.product
 
     // Local State
-    const [selectedCategory, setSelectedCategory] = useState<string>('')
     const [productCover, setProductCover] = useState<ImageInterface | null>(
       null
     )
@@ -74,7 +67,10 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
       index?: number
     ) => {
       try {
-        await requestPermission()
+        const permissionStatus = await requestPermission()
+        if (permissionStatus) {
+          return
+        }
 
         // Determine if this is bulk selection (no specific index) or single replacement
         const isBulkSelection = imageType === 'other' && index === undefined
@@ -300,19 +296,8 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
         return
       }
 
-      if (!productCover) {
-        toast.info('Please upload a product cover image')
-        return
-      }
-
-      if (!values?.category && !values.category_id) {
-        toast.info('Please select a category')
-        return
-      }
-
       let payload
       try {
-        setLoading(true)
         // Upload images to Cloudinary first and get URLs
         const imageUrls = await uploadImagesToCloudinary()
 
@@ -322,17 +307,17 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
 
         payload = {
           name: values.productName,
-          description: values.description,
-          ...(values.category_id && {category_id: values.category_id}),
-          ...(values.category &&
-            !values.category_id && {category: values.category}),
+          description: values.brand?.trim()
+            ? `Brand: ${values.brand.trim()}\n\nAdded from products page`
+            : 'Added from products page',
+          category: '',
           tags: [],
           unit_price: parseFloat(values.sellingPrice),
-          discount_price: 0,
-          cost_price: parseFloat(values.costPrice) || 0,
+          discount_price: parseFloat(values.discountPrice) || 0,
+          cost_price: 0,
           visible: true,
-          quantity: parseInt(values.availableUnits) || 0,
-          low_stock_alert: parseInt(values.lowStockAlert) || 0,
+          quantity: 1,
+          low_stock_alert: 0,
           images: limitedImages
         }
       } catch (error) {
@@ -356,7 +341,6 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
         // Reset form and images only if creating
         if (!isEditMode) {
           formik.resetForm()
-          setSelectedCategory('')
           setProductCover(null)
           setOtherImages([null, null, null, null])
         }
@@ -387,20 +371,14 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
         const setFormValues = () => {
           formik.setValues({
             productName: product.name || '',
-            costPrice: product.cost_price?.toString() || '',
+            brand: product.brand || '',
             sellingPrice: product.unit_price?.toString() || '',
-            availableUnits: product.quantity?.toString() || '',
-            lowStockAlert: product.low_stock_alert?.toString() || '',
+            discountPrice: product.discount_price?.toString() || '',
             description: product.description || ''
           })
         }
 
         setFormValues()
-
-        // Set selected category
-        if (product.category_id) {
-          setSelectedCategory(product.category_id)
-        }
 
         // Set images from existing product (URL images)
         if (product.images && product.images.length > 0) {
@@ -484,7 +462,6 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
           return response.url?.replace('http://', 'https://') || response.url
         })
 
-        setLoading(false)
         return [...existingUrls, ...newUrls]
       } catch (error) {
         console.log('Error uploading images to Cloudinary:', error)
@@ -503,10 +480,9 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
     const formik = useFormik({
       initialValues: {
         productName: '',
-        costPrice: '',
+        brand: '',
         sellingPrice: '',
-        availableUnits: '',
-        lowStockAlert: '',
+        discountPrice: '',
         description: ''
       },
       validateOnMount: true,
@@ -532,41 +508,13 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
             readOnly={loadingState.createProduct || loadingState.updateProduct}
           />
 
-          {/* <SelectField
-            name="Category"
-            label="Product Category"
-            placeholder={
-              categoriesLoading ? 'Loading categories...' : 'Select a category'
-            }
-            snapPoints={[400]}
-            value={selectedCategory}
-            onChangeValue={setSelectedCategory}
-            items={
-              categoriesData?.map((category: any) => ({
-                value: category.id,
-                text: category.name
-              })) || []
-            }
-            readOnly={
-              loadingState.createProduct ||
-              loadingState.updateProduct ||
-              categoriesLoading
-            }
-          /> */}
-          <SearchableInput
-            name="Category"
-            label="Category"
-            onChangeText={formik.handleChange('category')}
-            onChangeSelect={text => formik.setFieldValue('category_id', text)}
-            placeholder={
-              categoriesLoading ? 'Loading categories...' : 'Select a category'
-            }
-            options={
-              categoriesData?.map((category: any) => ({
-                value: category.id,
-                text: category.name
-              })) || []
-            }
+          <TextField
+            name="brand"
+            label="Brand"
+            placeholder="Brand e.g. Adaeze Collection"
+            value={formik.values.brand}
+            onChangeText={formik.handleChange('brand')}
+            readOnly={loadingState.createProduct || loadingState.updateProduct}
           />
 
           <FileUploadBox
@@ -606,68 +554,31 @@ const SaveEditProductModal = forwardRef<Modal, SaveEditProductModalProps>(
             </Typography>
           </Box>
 
-          <Box flexDirection="row" flex={1} gap={16}>
-            <TextField
-              name="costPrice"
-              label="Cost Price (₦)"
-              placeholder="Enter price"
-              keyboardType="phone-pad"
-              inputMode="numeric"
-              value={formik.values.costPrice}
-              onChangeText={formik.handleChange('costPrice')}
-              readOnly={
-                loadingState.createProduct || loadingState.updateProduct
-              }
-            />
-            <TextField
-              name="sellingPrice"
-              label="Selling Price (₦)"
-              placeholder="Enter price"
-              keyboardType="phone-pad"
-              inputMode="numeric"
-              value={formik.values.sellingPrice}
-              onChangeText={formik.handleChange('sellingPrice')}
-              readOnly={
-                loadingState.createProduct || loadingState.updateProduct
-              }
-            />
-          </Box>
-
-          <Box flexDirection="row" flex={1} gap={16}>
-            <TextField
-              name="availableUnits"
-              label="Total units available"
-              placeholder="Enter no. of units"
-              keyboardType="phone-pad"
-              inputMode="numeric"
-              value={formik.values.availableUnits}
-              onChangeText={formik.handleChange('availableUnits')}
-              readOnly={
-                loadingState.createProduct || loadingState.updateProduct
-              }
-            />
-            <TextField
-              name="lowStockAlert"
-              label="Low stock alert"
-              keyboardType="phone-pad"
-              inputMode="numeric"
-              placeholder="Enter low stock no."
-              value={formik.values.lowStockAlert}
-              onChangeText={formik.handleChange('lowStockAlert')}
-              readOnly={
-                loadingState.createProduct || loadingState.updateProduct
-              }
-            />
-          </Box>
-
-          <TextArea
-            name="description"
-            label="Description"
-            placeholder="Enter detailed description of your product"
-            value={formik.values.description}
-            onChangeText={formik.handleChange('description')}
+          <TextField
+            name="sellingPrice"
+            label="Selling Price (₦)"
+            placeholder="Enter price"
+            keyboardType="phone-pad"
+            inputMode="numeric"
+            value={formik.values.sellingPrice}
+            onChangeText={formik.handleChange('sellingPrice')}
             readOnly={loadingState.createProduct || loadingState.updateProduct}
           />
+
+          <TextField
+            name="discountPrice"
+            label="Discount Price (₦)"
+            placeholder="Enter discount price"
+            keyboardType="phone-pad"
+            inputMode="numeric"
+            value={formik.values.discountPrice}
+            onChangeText={formik.handleChange('discountPrice')}
+            readOnly={loadingState.createProduct || loadingState.updateProduct}
+          />
+
+          <Typography variant="c1" color="neutral-600">
+            This manual form now matches onboarding details.
+          </Typography>
         </Box>
       </AppModal>
     )

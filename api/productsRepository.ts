@@ -28,7 +28,7 @@ function mapToTextUploadPayload(payload: ICreateProductPayload) {
 export default {
   createProduct: (payload: ICreateProductPayload) => {
     return UseEndpoint({
-      endpoint: `/products/upload/text`,
+      endpoint: `/products`,
       method: HttpMethods.Post,
       payload: mapToTextUploadPayload(payload)
     })
