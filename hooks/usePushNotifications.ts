@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react-native'
 import Constants from 'expo-constants'
 import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
@@ -33,11 +32,6 @@ const registerToken = async (token: string) => {
       type: 'all'
     })
   } catch (err) {
-    Sentry.captureException(err, {
-      tags: {
-        source: 'register-device'
-      }
-    })
     console.error(err)
   }
 }

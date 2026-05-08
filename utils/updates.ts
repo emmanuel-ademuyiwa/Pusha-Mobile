@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react-native'
 import * as Updates from 'expo-updates'
 
 export async function updateAppOnMount() {
@@ -9,11 +8,7 @@ export async function updateAppOnMount() {
       await Updates.fetchUpdateAsync()
       await Updates.reloadAsync()
     }
-  } catch (error) {
-    Sentry.captureException(error, {
-      tags: {
-        source: 'fetch-update-async'
-      }
-    })
+  } catch {
+    // OTA check failed silently on mount; user can retry from settings
   }
 }

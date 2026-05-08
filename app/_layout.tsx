@@ -1,5 +1,4 @@
 import NetInfo from '@react-native-community/netinfo'
-import * as Sentry from '@sentry/react-native'
 import {ThemeProvider} from '@shopify/restyle'
 import {focusManager, onlineManager} from '@tanstack/react-query'
 import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client'
@@ -22,19 +21,7 @@ import {clientPersister, queryClient} from '@/utils/queryClient'
 import {useFonts} from 'expo-font'
 import { PaystackProvider } from 'react-native-paystack-webview';
 
-const SENTRY_DSN =
-  'https://2ee17e224c7d687a717558c492a4e6f0@o4509294588461056.ingest.us.sentry.io/4509294595342336'
-
-  const PAYSTACK_PUBLIC_KEY = 'pk_test_668fc54ca163266d580e0ee04ee1a3cc0205c190'
-
-// Init Sentry Config
-
-if (!__DEV__) {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    debug: true
-  })
-}
+const PAYSTACK_PUBLIC_KEY = 'pk_test_668fc54ca163266d580e0ee04ee1a3cc0205c190'
 
 // vexo(ENV.VEXO_ID ?? '')
 
@@ -136,6 +123,4 @@ function App() {
   )
 }
 
-const SalesRepApp = __DEV__ ? App : Sentry.wrap(App)
-
-export default SalesRepApp
+export default App

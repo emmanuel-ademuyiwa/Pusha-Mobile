@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react-native'
 import * as Updates from 'expo-updates'
 import {create} from 'zustand'
 
@@ -54,11 +53,6 @@ const useUpdatesStore = create<UpdatesStore>()((set, get) => {
           saveToVault('otaLastChecked', now.toString())
         } catch (err) {
           set(() => ({isUpdateScreenShown: false, updateExists: undefined}))
-          Sentry.captureException(err, {
-            tags: {
-              source: 'check-update-async'
-            }
-          })
           toast.error('Failed to check for updates')
         } finally {
           set(state => ({
@@ -96,11 +90,6 @@ const useUpdatesStore = create<UpdatesStore>()((set, get) => {
           }
         } catch (err) {
           set(() => ({isUpdateScreenShown: false, updateExists: undefined}))
-          Sentry.captureException(err, {
-            tags: {
-              source: 'fetch-update-async'
-            }
-          })
           toast.error('Failed to fetch updates')
           set(state => ({
             loadingState: {
@@ -124,11 +113,6 @@ const useUpdatesStore = create<UpdatesStore>()((set, get) => {
           saveToVault('otaLastChecked', now.toString())
         } catch (err) {
           set(() => ({isUpdateScreenShown: false, updateExists: undefined}))
-          Sentry.captureException(err, {
-            tags: {
-              source: 'auto-update-async'
-            }
-          })
         } finally {
           set(state => ({
             loadingState: {
