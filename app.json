@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pusha",
     "slug": "pusha",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "scheme": "pusha",
@@ -92,7 +92,7 @@
       "fallbackToCacheTimeout": 0,
       "enableBsdiffPatchSupport": true
     },
-    "runtimeVersion": "0.0.3",
+    "runtimeVersion": "0.0.4",
     "experiments": {
       "typedRoutes": true
     },
