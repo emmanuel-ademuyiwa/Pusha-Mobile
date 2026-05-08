@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pusha",
     "slug": "pusha",
-    "version": "0.0.3",
+    "version": "0.0.2",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "scheme": "pusha",
