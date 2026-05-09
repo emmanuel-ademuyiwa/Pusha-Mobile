@@ -12,15 +12,18 @@ import {
 } from '@/components/ui'
 import {SearchField} from '@/components/ui/search-field'
 import {useListProducts, type IProduct} from '@/queries/productsQuery'
+import {useFocusEffect} from '@react-navigation/native'
+import {router, useLocalSearchParams} from 'expo-router'
 import {StatusBar} from 'expo-status-bar'
 import {Modal} from '@/types/modal'
-import React, {useMemo, useRef, useState} from 'react'
+import React, {useCallback, useMemo, useRef, useState} from 'react'
 import {FlatList, TouchableOpacity} from 'react-native'
 import {ScreenView} from '@/components/util/screen-view'
 
 type AvailabilityFilter = null | 'available' | 'unavailable'
 
 const Products = () => {
+  const {addProduct} = useLocalSearchParams<{addProduct?: string}>()
   const addProductRef = useRef<Modal>(null)
   const [search, setSearch] = useState('')
   const [availabilityFilter, setAvailabilityFilter] =
@@ -67,6 +70,23 @@ const Products = () => {
   const total = allProducts.length
   const available = allProducts.filter(p => p.is_available).length
   const unavailable = allProducts.filter(p => !p.is_available).length
+
+  useFocusEffect(
+    useCallback(() => {
+      const shouldOpen =
+        addProduct === '1' ||
+        addProduct === 'true' ||
+        addProduct === 'yes'
+      if (!shouldOpen) return
+
+      const t = setTimeout(() => {
+        addProductRef.current?.present()
+        router.setParams({addProduct: undefined})
+      }, 0)
+
+      return () => clearTimeout(t)
+    }, [addProduct])
+  )
 
   if (isError) return <PageError reload={() => refetch().then(() => {})} />
   return (

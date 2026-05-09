@@ -1,0 +1,179 @@
+Incident Identifier: 9544468A-89B0-4BF9-8C31-4E48144D1928
+Distributor ID:      com.apple.TestFlight
+Hardware Model:      iPhone18,2
+Process:             Pusha [43040]
+Path:                /private/var/containers/Bundle/Application/66C744C5-F043-44C3-BF98-69AF7FADBB57/Pusha.app/Pusha
+Identifier:          com.pushahq.app
+Version:             0.0.1 (1)
+AppStoreTools:       17F41
+AppVariant:          1:iPhone18,2:26
+Beta:                YES
+Code Type:           ARM-64 (Native)
+Role:                Foreground
+Parent Process:      launchd [1]
+Coalition:           com.pushahq.app [8346]
+
+Date/Time:           2026-05-08 13:30:47.8167 +0100
+Launch Time:         2026-05-08 13:30:47.1776 +0100
+OS Version:          iPhone OS 26.4.2 (23E261)
+Release Type:        User
+Baseband Version:    1.55.04
+Report Version:      104
+
+Exception Type:  EXC_CRASH (SIGABRT)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Termination Reason: SIGNAL 6 Abort trap: 6
+Terminating Process: Pusha [43040]
+
+Triggered by Thread:  6
+
+Last Exception Backtrace:
+0   CoreFoundation                	0x18f5afc70 __exceptionPreprocess + 164 (NSException.m:249)
+1   libobjc.A.dylib               	0x18c085224 objc_exception_throw + 88 (objc-exception.mm:356)
+2   CoreFoundation                	0x18f5afbcc -[NSException raise] + 16 (NSException.m:129)
+3   Pusha                         	0x1007dcc4c StartupProcedure.throwException(_:) + 16 (ErrorRecovery.swift:277)
+4   Pusha                         	0x1007dcc4c protocol witness for ErrorRecoveryDelegate.throwException(_:) in conformance StartupProcedure + 16
+5   Pusha                         	0x1007dcc4c ErrorRecovery.crash() + 2500
+6   Pusha                         	0x1007db9f4 ErrorRecovery.runNextTask() + 560 (ErrorRecovery.swift:190)
+7   Pusha                         	0x1007dd0c8 closure #1 in closure #1 in ErrorRecovery.tryRelaunchFromCache() + 380 (ErrorRecovery.swift:233)
+8   Pusha                         	0x1007a5ffc <deduplicated_symbol> + 28
+9   libdispatch.dylib             	0x1c96e49a8 _dispatch_call_block_and_release + 32 (init.c:1597)
+10  libdispatch.dylib             	0x1c96fe1e4 _dispatch_client_callout + 16 (client_callout.mm:85)
+11  libdispatch.dylib             	0x1c96ecfb0 _dispatch_lane_serial_drain + 740 (queue.c:4033)
+12  libdispatch.dylib             	0x1c96edaac _dispatch_lane_invoke + 392 (queue.c:4124)
+13  libdispatch.dylib             	0x1c96f7dac _dispatch_root_queue_drain_deferred_wlh + 284 (queue.c:7329)
+14  libdispatch.dylib             	0x1c96f76ac _dispatch_workloop_worker_thread + 720 (queue.c:6923)
+15  libsystem_pthread.dylib       	0x1ee2e43b0 _pthread_wqthread + 292 (pthread.c:2696)
+16  libsystem_pthread.dylib       	0x1ee2e38c0 start_wqthread + 8 (:-1)
+
+Thread 0 name:
+Thread 0:
+0   libsystem_kernel.dylib        	0x000000023e33ccd4 mach_msg2_trap + 8 (:-1)
+1   libsystem_kernel.dylib        	0x000000023e34030c mach_msg2_internal + 76 (mach_msg.c:201)
+2   libsystem_kernel.dylib        	0x000000023e34022c mach_msg_overwrite + 424 (mach_msg.c:0)
+3   libsystem_kernel.dylib        	0x000000023e340078 mach_msg + 24 (mach_msg.c:323)
+4   CoreFoundation                	0x000000018f4ffea4 __CFRunLoopServiceMachPort + 160 (CFRunLoop.c:2650)
+5   CoreFoundation                	0x000000018f4c9f94 __CFRunLoopRun + 1188 (CFRunLoop.c:3035)
+6   CoreFoundation                	0x000000018f4c91d0 _CFRunLoopRunSpecificWithOptions + 532 (CFRunLoop.c:3462)
+7   GraphicsServices              	0x0000000234a07498 GSEventRunModal + 120 (GSEvent.c:2049)
+8   UIKitCore                     	0x000000019518d2c4 0x19506c000 + 1184452
+9   UIKitCore                     	0x00000001950f8158 0x19506c000 + 573784
+10  Pusha                         	0x000000010078d5cc main + 64 (AppDelegate.swift:6)
+11  dyld                          	0x000000018c0ddc1c start + 6928 (:-1)
+
+Thread 1:
+
+Thread 2:
+
+Thread 3:
+
+Thread 4:
+
+Thread 5 name:
+Thread 5:
+0   libsystem_kernel.dylib        	0x000000023e33ccd4 mach_msg2_trap + 8 (:-1)
+1   libsystem_kernel.dylib        	0x000000023e34030c mach_msg2_internal + 76 (mach_msg.c:201)
+2   libsystem_kernel.dylib        	0x000000023e34022c mach_msg_overwrite + 424 (mach_msg.c:0)
+3   libsystem_kernel.dylib        	0x000000023e340078 mach_msg + 24 (mach_msg.c:323)
+4   CoreFoundation                	0x000000018f4ffea4 __CFRunLoopServiceMachPort + 160 (CFRunLoop.c:2650)
+5   CoreFoundation                	0x000000018f4c9f94 __CFRunLoopRun + 1188 (CFRunLoop.c:3035)
+6   CoreFoundation                	0x000000018f4c91d0 _CFRunLoopRunSpecificWithOptions + 532 (CFRunLoop.c:3462)
+7   Foundation                    	0x000000018c73ccf0 -[NSRunLoop(NSRunLoop) runMode:beforeDate:] + 212 (NSRunLoop.m:375)
+8   Foundation                    	0x000000018c73cbd8 -[NSRunLoop(NSRunLoop) runUntilDate:] + 64 (NSRunLoop.m:422)
+9   UIKitCore                     	0x0000000195152afc 0x19506c000 + 944892
+10  Foundation                    	0x000000018c7c0804 __NSThread__start__ + 732 (NSThread.m:1004)
+11  libsystem_pthread.dylib       	0x00000001ee2e7438 _pthread_start + 136 (pthread.c:931)
+12  libsystem_pthread.dylib       	0x00000001ee2e38cc thread_start + 8 (:-1)
+
+Thread 6 name:
+Thread 6 Crashed:
+0   libsystem_kernel.dylib        	0x000000023e3471d0 __pthread_kill + 8 (:-1)
+1   libsystem_pthread.dylib       	0x00000001ee2ea7dc pthread_kill + 268 (pthread.c:1721)
+2   libsystem_c.dylib             	0x000000019b014de4 abort + 148 (abort.c:122)
+3   libc++abi.dylib               	0x000000018c185fd4 __abort_message + 132 (abort_message.cpp:66)
+4   libc++abi.dylib               	0x000000018c187b90 demangling_terminate_handler() + 296 (cxa_default_handlers.cpp:77)
+5   libobjc.A.dylib               	0x000000018c087868 _objc_terminate() + 156 (objc-exception.mm:496)
+6   libc++abi.dylib               	0x000000018c1921f8 std::__terminate(void (*)()) + 16 (cxa_handlers.cpp:59)
+7   libc++abi.dylib               	0x000000018c193e18 __cxxabiv1::failed_throw(__cxxabiv1::__cxa_exception*) + 88 (cxa_exception.cpp:152)
+8   libc++abi.dylib               	0x000000018c180360 __cxa_throw + 92 (cxa_exception.cpp:299)
+9   libobjc.A.dylib               	0x000000018c08538c objc_exception_throw + 448 (objc-exception.mm:385)
+10  CoreFoundation                	0x000000018f5afbcc -[NSException raise] + 16 (NSException.m:129)
+11  Pusha                         	0x00000001007dcc4c StartupProcedure.throwException(_:) + 16 (ErrorRecovery.swift:277)
+12  Pusha                         	0x00000001007dcc4c protocol witness for ErrorRecoveryDelegate.throwException(_:) in conformance StartupProcedure + 16
+13  Pusha                         	0x00000001007dcc4c ErrorRecovery.crash() + 2500
+14  Pusha                         	0x00000001007db9f4 ErrorRecovery.runNextTask() + 560 (ErrorRecovery.swift:190)
+15  Pusha                         	0x00000001007dd0c8 closure #1 in closure #1 in ErrorRecovery.tryRelaunchFromCache() + 380 (ErrorRecovery.swift:233)
+16  Pusha                         	0x00000001007a5ffc <deduplicated_symbol> + 28
+17  libdispatch.dylib             	0x00000001c96e49a8 _dispatch_call_block_and_release + 32 (init.c:1597)
+18  libdispatch.dylib             	0x00000001c96fe1e4 _dispatch_client_callout + 16 (client_callout.mm:85)
+19  libdispatch.dylib             	0x00000001c96ecfb0 _dispatch_lane_serial_drain + 740 (queue.c:4033)
+20  libdispatch.dylib             	0x00000001c96edaac _dispatch_lane_invoke + 392 (queue.c:4124)
+21  libdispatch.dylib             	0x00000001c96f7dac _dispatch_root_queue_drain_deferred_wlh + 284 (queue.c:7329)
+22  libdispatch.dylib             	0x00000001c96f76ac _dispatch_workloop_worker_thread + 720 (queue.c:6923)
+23  libsystem_pthread.dylib       	0x00000001ee2e43b0 _pthread_wqthread + 292 (pthread.c:2696)
+24  libsystem_pthread.dylib       	0x00000001ee2e38c0 start_wqthread + 8 (:-1)
+
+Thread 7:
+
+Thread 8:
+
+Thread 9:
+
+Thread 10:
+
+Thread 11 name:
+Thread 11:
+0   libsystem_kernel.dylib        	0x000000023e33ccd4 mach_msg2_trap + 8 (:-1)
+1   libsystem_kernel.dylib        	0x000000023e34030c mach_msg2_internal + 76 (mach_msg.c:201)
+2   libsystem_kernel.dylib        	0x000000023e34022c mach_msg_overwrite + 424 (mach_msg.c:0)
+3   libsystem_kernel.dylib        	0x000000023e340078 mach_msg + 24 (mach_msg.c:323)
+4   CoreFoundation                	0x000000018f4ffea4 __CFRunLoopServiceMachPort + 160 (CFRunLoop.c:2650)
+5   CoreFoundation                	0x000000018f4c9f94 __CFRunLoopRun + 1188 (CFRunLoop.c:3035)
+6   CoreFoundation                	0x000000018f4c91d0 _CFRunLoopRunSpecificWithOptions + 532 (CFRunLoop.c:3462)
+7   Pusha                         	0x0000000100dde7c0 +[RCTJSThreadManager runRunLoop] + 212 (RCTJSThreadManager.mm:102)
+8   Foundation                    	0x000000018c7c0804 __NSThread__start__ + 732 (NSThread.m:1004)
+9   libsystem_pthread.dylib       	0x00000001ee2e7438 _pthread_start + 136 (pthread.c:931)
+10  libsystem_pthread.dylib       	0x00000001ee2e38cc thread_start + 8 (:-1)
+
+Thread 12 name:
+Thread 12:
+0   libsystem_kernel.dylib        	0x000000023e3425e8 __psynch_cvwait + 8 (:-1)
+1   libsystem_pthread.dylib       	0x00000001ee2e5b48 _pthread_cond_wait + 980 (pthread_cond.c:862)
+2   libc++.1.dylib                	0x000000019eb8ebcc std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32 (condition_variable.cpp:36)
+3   hermesvm                      	0x000000010228a6c0 hermes::vm::HadesGC::Executor::worker() + 104 (:-1)
+4   hermesvm                      	0x000000010228a634 void* std::__1::__thread_proxy[abi:nn190102]<std::__1::tuple<std::__1::unique_ptr<std::__1::__thread_struct, std::__1::default_delete<std::__1::__thread_struct>>, hermes::vm::HadesGC::Executor::Exe... + 44 (:-1)
+5   libsystem_pthread.dylib       	0x00000001ee2e7438 _pthread_start + 136 (pthread.c:931)
+6   libsystem_pthread.dylib       	0x00000001ee2e38cc thread_start + 8 (:-1)
+
+
+Thread 6 crashed with ARM Thread State (64-bit):
+    x0: 0x0000000000000000   x1: 0x0000000000000000   x2: 0x0000000000000000   x3: 0x0000000000000000
+    x4: 0x000000018c194cd3   x5: 0x000000016f9b9520   x6: 0x000000000000006e   x7: 0xfffff0003ffff800
+    x8: 0x2cb02a01ff9e1884   x9: 0x2cb02a009005a884  x10: 0x0000000000000002  x11: 0x00000000fffffffd
+   x12: 0x0000000000000000  x13: 0x0000000000000000  x14: 0x0000000000000000  x15: 0x0000000000000000
+   x16: 0x0000000000000148  x17: 0x000000016f9bb000  x18: 0x0000000000000000  x19: 0x0000000000000006
+   x20: 0x0000000000005203  x21: 0x000000016f9bb0e0  x22: 0x00000001f65bc000  x23: 0x000000010b678300
+   x24: 0xd000000000000018  x25: 0x0000000107122b80  x26: 0x0000000000000038  x27: 0xc0000000000000bb
+   x28: 0x00000001fb00e950   fp: 0x000000016f9b9490   lr: 0x00000001ee2ea7dc
+    sp: 0x000000016f9b9470   pc: 0x000000023e3471d0 cpsr: 0x40000000
+   esr: 0x56000080 (Syscall)
+
+
+Binary Images:
+        0x100788000 -         0x101453fff Pusha arm64  <e397b61cd3383810954941250a594781> /private/var/containers/Bundle/Application/66C744C5-F043-44C3-BF98-69AF7FADBB57/Pusha.app/Pusha
+        0x101a34000 -         0x101a3ffff libobjc-trampolines.dylib arm64e  <e51a481b92f532ba9e8bfcecda3b8431> /private/preboot/Cryptexes/OS/usr/lib/libobjc-trampolines.dylib
+        0x1021e4000 -         0x1023e3fff hermesvm arm64  <b99b4f0d1b563d94940f383f4f00c905> /private/var/containers/Bundle/Application/66C744C5-F043-44C3-BF98-69AF7FADBB57/Pusha.app/Frameworks/hermesvm.framework/hermesvm
+        0x18c054000 -         0x18c0a547f libobjc.A.dylib arm64e  <dbe3f13eefc431c5b7623455cee83e7f> /usr/lib/libobjc.A.dylib
+        0x18c0d9000 -         0x18c17debf dyld arm64e  <80dd1800f68d354f81068cb5ea621aca> /usr/lib/dyld
+        0x18c17e000 -         0x18c19859f libc++abi.dylib arm64e  <e7bd32f9ab56392d8e79857cde598da1> /usr/lib/libc++abi.dylib
+        0x18c732000 -         0x18d5ba45f Foundation arm64e  <66bf417c1d003457a302196bbaec23d0> /System/Library/Frameworks/Foundation.framework/Foundation
+        0x18f49b000 -         0x18fa370ff CoreFoundation arm64e  <11f13078e01b343ba0208d60bae7bbb6> /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
+        0x19506c000 -         0x1975ab3bf UIKitCore arm64e  <32c1b300a6013e148b533419a2d2f234> /System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore
+        0x19af9e000 -         0x19b01d30f libsystem_c.dylib arm64e  <08196a2fb3fa3d0bb151ad50a6d0a0b4> /usr/lib/system/libsystem_c.dylib
+        0x19eb82000 -         0x19ec12a7b libc++.1.dylib arm64e  <c3f6d9de52273c4cbec3bd43bfb08435> /usr/lib/libc++.1.dylib
+        0x1c96e3000 -         0x1c97295ff libdispatch.dylib arm64e  <5fcac52f01e93bf08aac42c442c53560> /usr/lib/system/libdispatch.dylib
+        0x1ee2e3000 -         0x1ee2ef4ef libsystem_pthread.dylib arm64e  <6c9bcde9819d345d9d71b60ad47e5159> /usr/lib/system/libsystem_pthread.dylib
+        0x234a06000 -         0x234a0e7bf GraphicsServices arm64e  <4e01d837d3923b40abd3ff5755b93327> /System/Library/PrivateFrameworks/GraphicsServices.framework/GraphicsServices
+        0x23e33c000 -         0x23e377ac7 libsystem_kernel.dylib arm64e  <5f4e68e1021c3a8fa6f62c4c077d0676> /usr/lib/system/libsystem_kernel.dylib
+
+EOF

@@ -8,14 +8,19 @@ import {
 } from '@/components/ui'
 import {ImageBackground} from 'expo-image'
 import {StatusBar} from 'expo-status-bar'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 
 import NumericKeypad from '@/components/ui/numeric-keypad'
 import {KeyboardAwareScrollView} from '@/components/util/keyboard-aware-scroll-view'
-import {useAuthActions, useAuthLoadingState} from '@/store/authStore'
+import {
+  useAuthActions,
+  useAuthLoadingState,
+  useBiometricsEnabled
+} from '@/store/authStore'
 import {getFromVault} from '@/utils/storage'
+import * as LocalAuthentication from 'expo-local-authentication'
 import {LinearGradient} from 'expo-linear-gradient'
-import {Platform} from 'react-native'
+import {Alert, Platform} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 const images = {
@@ -27,20 +32,60 @@ const Page = () => {
   const user = getFromVault('user')
   const authActions = useAuthActions()
   const authLoadingState = useAuthLoadingState()
+  const biometricsEnabled = useBiometricsEnabled()
   const insets = useSafeAreaInsets()
   const [passcode, setPasscode] = useState('')
+  const userEmail = user?.email
 
-  const handleLogin = async () => {
+  const handleLogin = useCallback(async () => {
+    if (!userEmail) {
+      Alert.alert('Login', 'Please sign in again to continue.')
+      return
+    }
+
     const payload = {
       password: passcode,
-      email: user.email
+      email: userEmail
     }
     await authActions.logIn(payload)
-  }
+  }, [authActions, passcode, userEmail])
+
+  const handleBiometricLogin = useCallback(async () => {
+    const savedPasscode = getFromVault('authority') as string | undefined
+
+    if (!userEmail || !savedPasscode) {
+      Alert.alert('Biometric Login', 'Please sign in with your passcode first.')
+      return
+    }
+
+    const hasHardware = await LocalAuthentication.hasHardwareAsync()
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+
+    if (!hasHardware || !isEnrolled) {
+      Alert.alert(
+        'Biometric Login',
+        'Biometric authentication is not available on this device.'
+      )
+      return
+    }
+
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Log in with biometrics',
+      disableDeviceFallback: true,
+      cancelLabel: 'Cancel'
+    })
+
+    if (result.success) {
+      await authActions.logIn({
+        email: userEmail,
+        password: savedPasscode
+      })
+    }
+  }, [authActions, userEmail])
 
   useEffect(() => {
     passcode.length === 4 && handleLogin()
-  }, [passcode])
+  }, [handleLogin, passcode])
 
   const handleSwitchAccount = async () => {
     await authActions.switchUser()
@@ -126,6 +171,9 @@ const Page = () => {
                   setPasscode(passcode + val)
               }}
               onDelete={() => setPasscode(passcode.slice(0, -1))}
+              onBiometricPress={
+                biometricsEnabled ? handleBiometricLogin : undefined
+              }
             />
             <Box pb={50} />
           </KeyboardAwareScrollView>

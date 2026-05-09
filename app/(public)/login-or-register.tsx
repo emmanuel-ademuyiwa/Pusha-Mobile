@@ -66,7 +66,6 @@ const Page = () => {
               scrollX={scrollX}
               scrollTo={scrollTo}
               scrollBack={scrollBack}
-              currentIndex={currentIndex}
             />
           </Box>
         )}

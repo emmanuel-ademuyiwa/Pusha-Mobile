@@ -51,7 +51,7 @@ const More = () => {
       <StatusBar style="dark" animated />
       <KeyboardAwareScrollView>
         <Container>
-          <Box pt={24}>
+          <Box pt={24} pb={100} gap={16}>
             <UserManagementSection
               title="Business profile"
               layout="grouped"
@@ -127,7 +127,7 @@ const More = () => {
                 {
                   id: 'biometric',
                   title: 'Biometric Login',
-                  icon: 'WifiSquare',
+                  icon: 'FingerScan',
                   rightElement: (
                     <BZSwitch
                       value={biometricsEnabled}

@@ -142,32 +142,12 @@ const getPrevRange = (period: MainPeriod) => {
   }
 }
 
-const buildBarData = (salesData: any, period: string): BarItem[] => {
-  const todayDow = new Date().getDay()
-
-  if (period === 'today' || period === 'this-week') {
-    return WEEK_DAYS.map((day, i) => ({
-      value: salesData?.[day.key] ?? 0,
-      label: day.label,
-      frontColor: i === todayDow ? '#2554CF' : '#C7D7F5'
-    }))
-  }
-
-  if (period === 'this-month') {
-    const weekly = salesData?.weekly ?? {}
-    return ['week1', 'week2', 'week3', 'week4'].map((wk, i) => ({
-      value: weekly[wk] ?? 0,
-      label: `W${i + 1}`,
-      frontColor: '#C7D7F5'
-    }))
-  }
-
-  return WEEK_DAYS.map(day => ({
+const buildBarData = (salesData: any): BarItem[] =>
+  WEEK_DAYS.map(day => ({
     value: salesData?.[day.key] ?? 0,
     label: day.label,
     frontColor: '#C7D7F5'
   }))
-}
 
 const getChangeSuffix = (period: MainPeriod) => {
   if (period === 'today') return 'from yesterday'
@@ -305,6 +285,7 @@ const Dashboard = () => {
     date_from: chartRange.start,
     date_to: chartRange.end
   })
+  
 
   const {data: topProducts} = useTopProducts({
     period: productsPeriod,
@@ -397,9 +378,11 @@ const Dashboard = () => {
   }, [stats?.pendingOrders, prevStats?.pendingOrders])
 
   const barData = useMemo(
-    () => buildBarData(chartStats?.salesData, chartPeriod),
-    [chartStats?.salesData, chartPeriod]
+    () => buildBarData(chartStats?.salesData),
+    [chartStats?.salesData]
   )
+
+  console.log('barData', barData)
 
   if (isError) return <PageError reload={() => refetch().then(() => {})} />
 
@@ -604,7 +587,7 @@ const Dashboard = () => {
                   onChange={p => setChartPeriod(p)}
                 />
               </Box>
-              <PlatformSalesChart data={barData} period={chartPeriod} />
+              <PlatformSalesChart data={barData} />
             </Box>
 
             {/* ── Top Sales Channels ── */}
@@ -987,7 +970,12 @@ const Dashboard = () => {
 
       {/* ── FAB ── */}
       <FloatingButton
-        onPress={() => router.push('/(auth)/(tabs)/products' as any)}>
+        onPress={() =>
+          router.push({
+            pathname: '/(auth)/(tabs)/products',
+            params: {addProduct: '1'}
+          } as any)
+        }>
         <AppIcon name="Plus" size={24} color="#fff" />
       </FloatingButton>
     </ScreenView>

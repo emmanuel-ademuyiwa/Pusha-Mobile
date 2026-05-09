@@ -73,7 +73,7 @@ export const PeriodFilter = (props: Props) => {
                   {item.name}
                 </Typography>
                 {currentFilter.enum === item.enum && (
-                  <AppIcon name="Check" size={20} color="#20B038" />
+                  <AppIcon name="check-fill" size={20} color="#1D419B" />
                 )}
               </Box>
               {key !== filterItems.length - 1 && <Divider />}

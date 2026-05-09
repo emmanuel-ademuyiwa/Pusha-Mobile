@@ -1,6 +1,7 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import React from 'react'
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {AppIcon} from '../app-icon'
 
 const KEY_BG = '#EFEFF4'
 const KEY_TEXT = '#142952'
@@ -33,7 +34,7 @@ const ROWS: KeyDef[][] = [
 export interface NumericKeypadProps {
   onKeyPress: (val: string) => void
   onDelete: () => void
-  /** When set, the face-ID slot is tappable; otherwise it appears disabled. */
+  /** Shows and enables the biometric key when biometric login is active. */
   onBiometricPress?: () => void
 }
 
@@ -107,17 +108,24 @@ function KeyCell({
     )
   }
 
-  const bioEnabled = Boolean(onBiometricPress)
+  if (!onBiometricPress) {
+    return <View style={styles.cell} />
+  }
+
   return (
     <View style={styles.cell}>
       <TouchableOpacity
-        style={[styles.keyCircle, !bioEnabled && styles.keyCircleDisabled]}
+        style={styles.keyCircle}
         onPress={onBiometricPress}
-        disabled={!bioEnabled}
         activeOpacity={0.65}
         accessibilityRole="button"
         accessibilityLabel="Biometric unlock">
-        <MaterialIcons name="face" size={ICON_SIZE} color={KEY_TEXT} />
+        <AppIcon
+          name="FingerScan"
+          size={ICON_SIZE + 2}
+          color={KEY_TEXT}
+          variant="Bulk"
+        />
       </TouchableOpacity>
     </View>
   )
@@ -147,9 +155,6 @@ const styles = StyleSheet.create({
     backgroundColor: KEY_BG,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  keyCircleDisabled: {
-    opacity: 0.35,
   },
   keyInner: {
     alignItems: 'center',

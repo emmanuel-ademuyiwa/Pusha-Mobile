@@ -1,8 +1,8 @@
-import AppPressable from '../pressable'
-import Box from '../box'
-import Typography from '../typography'
 import React from 'react'
-import {ScrollView, StyleSheet} from 'react-native'
+import {StyleSheet} from 'react-native'
+import Box from '../box'
+import AppPressable from '../pressable'
+import Typography from '../typography'
 
 export interface PeriodTabItem<T extends string = string> {
   key: T
@@ -24,9 +24,12 @@ export function PeriodTabsRow<T extends string>({
   trailing
 }: PeriodTabsRowProps<T>) {
   return (
-    
-      <Box flexDirection='row' alignItems='center' justifyContent='space-between' mb={8}>
-        <Box flexDirection="row" alignItems="center" gap={8} pb={4} pt={8}>
+    <Box
+      flexDirection="row"
+      alignItems="center"
+      justifyContent="space-between"
+      mb={8}>
+      <Box flexDirection="row" alignItems="center" gap={8} pb={4} pt={8}>
         {tabs.map(({key, label}) => (
           <AppPressable key={key} onPress={() => onSelect(key)}>
             <Box
@@ -45,8 +48,8 @@ export function PeriodTabsRow<T extends string>({
           </AppPressable>
         ))}
       </Box>
-        {trailing}
-      </Box>
+      {trailing}
+    </Box>
   )
 }
 

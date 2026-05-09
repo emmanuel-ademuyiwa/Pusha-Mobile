@@ -1,101 +1,40 @@
-import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
-import {Tabs} from 'expo-router'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import {NativeTabs} from 'expo-router/unstable-native-tabs'
 import React from 'react'
-import {Platform, StyleSheet, View} from 'react-native'
-import {useSafeAreaInsets} from 'react-native-safe-area-context'
-
-import {TabBarButton} from '@/components/ui/tab-bar-button'
-
-const TABS = [
-  {name: 'dashboard', icon: 'Home', selectedIcon: 'Home', text: 'Home'},
-  {name: 'sales', icon: 'Chart', selectedIcon: 'Chart1', text: 'Sales'},
-  {
-    name: 'products',
-    icon: 'Notepad2',
-    selectedIcon: 'Notepad2',
-    text: 'Products'
-  },
-  {
-    name: 'chats',
-    icon: 'Messages',
-    selectedIcon: 'Messages1',
-    text: 'Chats'
-  },
-  {
-    name: 'more',
-    icon: 'HamburgerMenu',
-    selectedIcon: 'HamburgerMenu',
-    text: 'More'
-  }
-] as const
 
 const ACTIVE_COLOR = '#2554C7'
 const INACTIVE_COLOR = '#777777'
 
-const TabBar = ({state, navigation}: BottomTabBarProps) => {
-  const insets = useSafeAreaInsets()
-
-  return (
-    <View
-      style={[
-        styles.tabBar,
-        {
-          paddingBottom:
-            Platform.OS === 'android'
-              ? Math.max(insets.bottom, 24)
-              : Math.max(insets.bottom, 16)
-        }
-      ]}>
-      {state.routes.map((route, index) => {
-        const tab = TABS.find(t => t.name === route.name)
-        if (!tab) return null
-
-        const focused = state.index === index
-
-        return (
-          <TabBarButton
-            key={route.key}
-            tab={tab}
-            accessibilityState={{selected: focused}}
-            activeTintColor={ACTIVE_COLOR}
-            inactiveTintColor={INACTIVE_COLOR}
-            onPress={() => {
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-                canPreventDefault: true
-              })
-              if (!focused && !event.defaultPrevented) {
-                navigation.navigate(route.name)
-              }
-            }}
-          />
-        )
-      })}
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#E9EAEB',
-    paddingTop: 8
-  }
-})
+/** Outline icons — lighter weight than Material Community; swap names anytime to taste */
+const TABS = [
+  {name: 'dashboard' as const, label: 'Home', icon: 'home-outline' as const},
+  {name: 'sales' as const, label: 'Sales', icon: 'stats-chart-outline' as const},
+  {name: 'products' as const, label: 'Products', icon: 'cube-outline' as const},
+  {name: 'chats' as const, label: 'Chats', icon: 'chatbubbles-outline' as const},
+  {name: 'more' as const, label: 'More', icon: 'reorder-three-outline' as const}
+]
 
 export default function TabLayout() {
   return (
-    <Tabs
-      tabBar={props => <TabBar {...props} />}
-      screenOptions={{headerShown: false}}>
-      <Tabs.Screen name="dashboard" />
-      <Tabs.Screen name="sales" />
-      <Tabs.Screen name="products" />
-      <Tabs.Screen name="chats" />
-      <Tabs.Screen name="more" />
-    </Tabs>
+    <NativeTabs
+      tintColor={ACTIVE_COLOR}
+      iconColor={{default: INACTIVE_COLOR, selected: ACTIVE_COLOR}}
+      labelStyle={{
+        default: {color: INACTIVE_COLOR, fontWeight: '400'},
+        selected: {color: ACTIVE_COLOR, fontWeight: '700'}
+      }}
+      backgroundColor="#fff"
+      shadowColor="#E9EAEB">
+      {TABS.map(tab => (
+        <NativeTabs.Trigger key={tab.name} name={tab.name}>
+          <NativeTabs.Trigger.Icon
+            renderingMode="template"
+            // expo-router awaits Promise<ImageSource> at runtime (types omit Promise)
+            src={Ionicons.getImageSource(tab.icon, 24, 'white') as never}
+          />
+          <NativeTabs.Trigger.Label>{tab.label}</NativeTabs.Trigger.Label>
+        </NativeTabs.Trigger>
+      ))}
+    </NativeTabs>
   )
 }
